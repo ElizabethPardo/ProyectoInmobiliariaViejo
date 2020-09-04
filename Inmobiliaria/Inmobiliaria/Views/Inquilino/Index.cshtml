@@ -1,0 +1,108 @@
+﻿@model IEnumerable<Inmobiliaria.Models.Inquilino>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Inquilinos";
+}
+<h1>Inquilinos</h1>
+
+<p>
+    <a asp-action="Create">Crear nuevo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdInquilino)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dni)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Direccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LugarTrabajo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreGarante)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApellidoGarante)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DniGarante)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TelefonoGarante)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DireccionGarante)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdInquilino)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dni)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Direccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LugarTrabajo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreGarante)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApellidoGarante)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DniGarante)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TelefonoGarante)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DireccionGarante)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar"><span class="lnr lnr-pencil"></span></a>&nbsp;
+                <a asp-action="Eliminar" asp-route-id="@item.IdInquilino" title="Eliminar"><span class="lnr lnr-cross"></span></a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

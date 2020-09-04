@@ -23,6 +23,13 @@ namespace Inmobiliaria.Controllers
             return View();
         }
 
+
+        
+        public ActionResult Admin()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

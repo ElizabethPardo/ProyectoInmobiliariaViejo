@@ -1,0 +1,90 @@
+﻿@model Inmobiliaria.Models.Inquilino
+
+@{ ViewData["Title"] = "Eliminar"; }
+
+<h1>Eliminar</h1>
+
+<h3>¿Seguro que desea eliminar el inquilino?</h3>
+<div>
+    <h4>Propietario</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdInquilino)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdInquilino)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Apellido)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Apellido)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Dni)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Dni)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Telefono)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Direccion)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Direccion)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NombreGarante)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NombreGarante)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ApellidoGarante)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ApellidoGarante)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DniGarante)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DniGarante)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TelefonoGarante)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TelefonoGarante)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DireccionGarante)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DireccionGarante)
+        </dd>
+    </dl>
+
+    <form asp-action="Eliminar">
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index">Volver al listado</a>
+    </form>
+</div>
