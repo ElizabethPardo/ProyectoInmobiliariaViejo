@@ -23,7 +23,11 @@ namespace Inmobiliaria.Controllers
         // GET: InquilinoController
         public ActionResult Index()
         {
-            return View();
+            var lista = repositorio.ObtenerTodos();
+            ViewBag.Id = TempData["Id"];
+            if (TempData.ContainsKey("Mensaje"))
+                ViewBag.Mensaje = TempData["Mensaje"];
+            return View(lista);
         }
 
         // GET: InquilinoController/Details/5
