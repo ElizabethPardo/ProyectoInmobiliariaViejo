@@ -54,12 +54,12 @@ namespace Inmobiliaria.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    propietario.Clave = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    /*propietario.Clave = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                         password: propietario.Clave,
                         salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
                         prf: KeyDerivationPrf.HMACSHA1,
                         iterationCount: 1000,
-                        numBytesRequested: 256 / 8));
+                        numBytesRequested: 256 / 8));*/
                     repositorio.Alta(propietario);
                     TempData["Id"] = propietario.IdPropietario;
                     return RedirectToAction(nameof(Index));

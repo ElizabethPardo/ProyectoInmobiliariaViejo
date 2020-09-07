@@ -89,9 +89,9 @@ namespace Inmobiliaria.Models
 			IList<Inmueble> res = new List<Inmueble>();
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = "SELECT Id, Direccion, Ambientes, Uso, Tipo, Precio, Estado, PropietarioId," +
+				string sql = "SELECT i.Id, i.Direccion, Ambientes, Uso, Tipo, Precio, Estado, PropietarioId," +
 					" p.Nombre, p.Apellido" +
-					" FROM Inmueble i INNER JOIN Propietario p ON i.PropietarioId = p.IdPropietario";
+					" FROM Inmueble i INNER JOIN Propietario p ON i.PropietarioId = p.Id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.CommandType = CommandType.Text;

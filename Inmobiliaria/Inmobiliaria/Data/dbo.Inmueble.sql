@@ -1,15 +1,11 @@
 ﻿CREATE TABLE [dbo].[Inmueble] (
-    [Id]                INT           IDENTITY (1, 1) NOT NULL,
-    [DireccionInmueble] NVARCHAR (50) NULL,
-    [Ambientes]         INT           NULL,
-    [Uso]               INT           NULL,
-    [Tipo]              INT           NULL,
-    [Precio]            DECIMAL (18)  NULL,
-    [Estado]            INT           NULL,
-    [PropietarioId]     INT           NOT NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC),
-    FOREIGN KEY ([PropietarioId]) REFERENCES [dbo].[Propietario] ([IdPropietario])
+    [Id]            INT NOT NULL IDENTITY PRIMARY KEY,
+    [Ambientes]     INT          NULL,
+    [Uso]           INT          NULL,
+    [Tipo]          INT          NULL,
+    [Precio]        DECIMAL (18) NULL,
+    [Estado]        BIT          NULL,
+    [PropietarioId] INT          NOT NULL,
+    FOREIGN KEY ([PropietarioId]) REFERENCES [dbo].[Propietario] ([Id])
 );
 
-
-GO

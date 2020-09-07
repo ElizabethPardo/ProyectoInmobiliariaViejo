@@ -10,6 +10,7 @@
 <p>
     <a asp-action="Create">Crear nuevo</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
@@ -52,7 +53,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.DireccionGarante)
             </th>
-            <th></th>
+            <th>
+
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -99,8 +102,8 @@
                 @Html.DisplayFor(modelItem => item.DireccionGarante)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar"><span class="lnr lnr-pencil"></span></a>&nbsp;
-                <a asp-action="Eliminar" asp-route-id="@item.IdInquilino" title="Eliminar"><span class="lnr lnr-cross"></span></a>
+                <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar">Editar</a>&nbsp;
+                <a asp-action="Delete" asp-route-id="@item.IdInquilino" title="Eliminar">Eliminar</a>
             </td>
         </tr>
         }

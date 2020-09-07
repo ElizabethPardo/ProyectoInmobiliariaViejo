@@ -24,7 +24,7 @@ namespace Inmobiliaria.Models
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				string sql = $"INSERT INTO Propietario (Nombre, Apellido, Dni,Direccion, Telefono, Email, Clave) " +
-					$"VALUES (@nombre, @apellido, @dni,@direccion @telefono, @email, @clave);" +
+					$"VALUES (@nombre, @apellido, @dni,@direccion, @telefono, @email, @clave);" +
 					"SELECT SCOPE_IDENTITY();";//devuelve el id insertado (LAST_INSERT_ID para mysql)
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
@@ -49,7 +49,7 @@ namespace Inmobiliaria.Models
 			int res = -1;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"DELETE FROM Propietario WHERE IdPropietario = @id";
+				string sql = $"DELETE FROM Propietario WHERE Id = @id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.CommandType = CommandType.Text;
@@ -68,7 +68,7 @@ namespace Inmobiliaria.Models
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				string sql = $"UPDATE Propietario SET Nombre=@nombre, Apellido=@apellido, Dni=@dni,Direccion=@direccion, Telefono=@telefono, Email=@email, Clave=@clave " +
-					$"WHERE IdPropietario = @id";
+					$"WHERE Id = @id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.CommandType = CommandType.Text;
@@ -93,7 +93,7 @@ namespace Inmobiliaria.Models
 			IList<Propietario> res = new List<Propietario>();
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"SELECT IdPropietario, Nombre, Apellido, Dni, Direccion,Telefono, Email, Clave" +
+				string sql = $"SELECT Id, Nombre, Apellido, Dni, Direccion,Telefono, Email, Clave" +
 					$" FROM Propietario";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
@@ -127,8 +127,8 @@ namespace Inmobiliaria.Models
 			Propietario p = null;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"SELECT IdPropietario, Nombre, Apellido, Dni,Direccion, Telefono, Email, Clave FROM Propietario" +
-					$" WHERE IdPropietario=@id";
+				string sql = $"SELECT Id, Nombre, Apellido, Dni,Direccion, Telefono, Email, Clave FROM Propietario" +
+					$" WHERE Id=@id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.Parameters.Add("@id", SqlDbType.Int).Value = id;

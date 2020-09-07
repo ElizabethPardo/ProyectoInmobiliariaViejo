@@ -21,8 +21,9 @@ namespace Inmobiliaria.Models
 			int res = -1;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"INSERT INTO Inquilino (Nombre, Apellido, Dni, Telefono, Direccion, Email, LugarTrabajo, NombreGarante,ApellidoGarante DniGarante, TelefonoGarante, DireccionGarante) " +
-					$"VALUES (@nombre, @apellido, @dni, @telefono,@direccion, @email, @lugarTrabajo, @nombreGarante,@apellidoGarante, @dniGarante, @telefonoGarante, @direccionGarante)";
+				string sql = $"INSERT INTO Inquilino (Nombre, Apellido, Dni, Telefono, Direccion, Email, LugarTrabajo, NombreGarante,ApellidoGarante,DniGarante, TelefonoGarante, DireccionGarante) " +
+					$"VALUES (@nombre, @apellido, @dni, @telefono,@direccion, @email, @lugarTrabajo, @nombreGarante,@apellidoGarante, @dniGarante, @telefonoGarante, @direccionGarante);" +
+					"SELECT SCOPE_IDENTITY();";//devuelve el id insertado (LAST_INSERT_ID para mysql)
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.CommandType = CommandType.Text;
@@ -39,10 +40,11 @@ namespace Inmobiliaria.Models
 					command.Parameters.AddWithValue("@telefonoGarante", e.TelefonoGarante);
 					command.Parameters.AddWithValue("@direccionGarante", e.DireccionGarante);
 					connection.Open();
-					res = command.ExecuteNonQuery();
-					command.CommandText = "SELECT SCOPE_IDENTITY()";
-					e.IdInquilino = (int)command.ExecuteScalar();
+		
+					res = Convert.ToInt32(command.ExecuteScalar());
+					e.IdInquilino = res;
 					connection.Close();
+
 				}
 			}
 			return res;
@@ -53,7 +55,7 @@ namespace Inmobiliaria.Models
 			int res = -1;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"DELETE FROM Inquilino WHERE IdInquilino = {id}";
+				string sql = $"DELETE FROM Inquilino WHERE Id = {id}";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.CommandType = CommandType.Text;
@@ -71,8 +73,8 @@ namespace Inmobiliaria.Models
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				string sql = $"UPDATE Inquilino SET " +
-					$"Nombre=@nombre', Apellido=@apellido, Dni=@dni, Telefono=@telefono,Direccion=@direccion, Email=@email,LugarTrabajo=@lugar_trabajo, NombreGarante=@nombre_garante,ApellidoGarante=@apellidoGarante, DniGarante=@dni_garante, TelefonoGarante=@telefono_garante, DireccionGarante=@direccion_garante" +
-					$"WHERE IdInquilino = @id";
+					$"Nombre=@nombre, Apellido=@apellido, Dni=@dni, Telefono=@telefono,Direccion=@direccion, Email=@email,LugarTrabajo=@lugar_trabajo, NombreGarante=@nombre_garante,ApellidoGarante=@apellido_garante, DniGarante=@dni_garante, TelefonoGarante=@telefono_garante, DireccionGarante=@direccion_garante " +
+					$"WHERE Id = @id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.CommandType = CommandType.Text;
@@ -102,7 +104,7 @@ namespace Inmobiliaria.Models
 			IList<Inquilino> res = new List<Inquilino>();
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"SELECT IdInquilino, Nombre, Apellido, Dni, Telefono,Direccion, Email, LugarTrabajo, NombreGarante, ApellidoGarante, DniGarante, TelefonoGarante, DireccionGarante" +
+				string sql = $"SELECT Id, Nombre, Apellido, Dni, Telefono,Direccion, Email, LugarTrabajo, NombreGarante, ApellidoGarante, DniGarante, TelefonoGarante, DireccionGarante" +
 					$" FROM Inquilino";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
@@ -140,8 +142,8 @@ namespace Inmobiliaria.Models
 			Inquilino p = null;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"SELECT IdInquilino, Nombre, Apellido, Dni, Telefono,Direccion, Email, LugarTrabajo, NombreGarante, ApellidoGarante, DniGarante, TelefonoGarante, DireccionGarante FROM Inquilino" +
-					$" WHERE IdInquilino=@id";
+				string sql = $"SELECT Id, Nombre, Apellido, Dni, Telefono,Direccion, Email, LugarTrabajo, NombreGarante, ApellidoGarante, DniGarante, TelefonoGarante, DireccionGarante FROM Inquilino" +
+					$" WHERE Id=@id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.CommandType = CommandType.Text;

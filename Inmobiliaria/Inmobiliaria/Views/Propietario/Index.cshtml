@@ -10,6 +10,7 @@
 <p>
     <a asp-action="Create">Crear nuevo</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
@@ -57,8 +58,8 @@
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.IdPropietario" title="Editar"><span class="lnr lnr-pencil"></span></a>&nbsp;
-                    <a asp-action="Eliminar" asp-route-id="@item.IdPropietario" title="Eliminar"><span class="lnr lnr-cross"></span></a>
+                    <a asp-action="Edit" asp-route-id="@item.IdPropietario" title="Editar"><span class="lnr lnr-pencil">Editar</span></a>&nbsp;
+                    <a asp-action="Delete" asp-route-id="@item.IdPropietario" title="Eliminar"><span class="lnr lnr-cross">Eliminar</span></a>
                 </td>
             </tr>
 }
