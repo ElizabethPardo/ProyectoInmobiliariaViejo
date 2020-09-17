@@ -9,128 +9,127 @@ using Microsoft.Extensions.Configuration;
 
 namespace Inmobiliaria.Controllers
 {
-    public class InquilinoController : Controller
+    public class ContratoController : Controller
     {
-
-        private readonly RepositorioInquilino repositorio;
+        private readonly RepositorioContrato repositorio;
+        private readonly RepositorioInmueble repoInmueble;
+        private readonly RepositorioInquilino repoInquilino;
         private readonly IConfiguration config;
 
-        public InquilinoController(IConfiguration config)
+        public  ContratoController(IConfiguration config)
         {
-            repositorio = new RepositorioInquilino(config);
+            repositorio = new RepositorioContrato(config);
+            repoInquilino = new RepositorioInquilino(config);
+            repoInmueble = new RepositorioInmueble(config);
+            
             this.config = config;
         }
-        // GET: InquilinoController
+
+        // GET: Contrato
         public ActionResult Index()
         {
             var lista = repositorio.ObtenerTodos();
-            ViewBag.Id = TempData["Id"];
+            if (TempData.ContainsKey("Id"))
+                ViewBag.Id = TempData["Id"];
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
             return View(lista);
         }
 
-        // GET: InquilinoController/Details/5
+        // GET: Contrato/Details/5
         public ActionResult Details(int id)
         {
             var entidad = repositorio.ObtenerPorId(id);
             return View(entidad);
-            
         }
 
-        // GET: InquilinoController/Create
+        // GET: Contrato/Create
         public ActionResult Create()
         {
+            ViewBag.Inquilinos = repoInquilino.ObtenerTodos();
+            ViewBag.Inmuebles = repoInmueble.ObtenerTodos();
             return View();
         }
 
-        // POST: InquilinoController/Create
+        // POST: Contrato/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Inquilino inquilino)
+        public ActionResult Create(Contrato entidad)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    repositorio.Alta(inquilino);
-                    TempData["Id"] = inquilino.IdInquilino;
+                    repositorio.Alta(entidad);
+                    TempData["Id"] = entidad.IdContrato;
                     return RedirectToAction(nameof(Index));
+
                 }
                 else
                 {
-                    ViewBag.Propietarios = repositorio.ObtenerTodos();
-                    return View(inquilino);
+                    ViewBag.Inquilinos = repoInquilino.ObtenerTodos(); 
+                    ViewBag.Inmuebles = repoInmueble.ObtenerTodos();
+                    return View(entidad);
                 }
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
                 ViewBag.StackTrate = ex.StackTrace;
-                return View(inquilino);
+                return View(entidad);
             }
         }
 
-        // GET: InquilinoController/Edit/5
+        // GET: Contrato/Edit/5
         public ActionResult Edit(int id)
         {
-            var p = repositorio.ObtenerPorId(id);
+            var entidad = repositorio.ObtenerPorId(id);
+            ViewBag.Inquilinos = repoInquilino.ObtenerTodos();
+            ViewBag.Inmuebles = repoInmueble.ObtenerTodos();
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
             if (TempData.ContainsKey("Error"))
                 ViewBag.Error = TempData["Error"];
-            return View(p);
+            return View(entidad);
         }
 
-        // POST: InquilinoController/Edit/5
+        // POST: Contrato/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Contrato entidad)
         {
-            Inquilino p = null;
             try
             {
-                p = repositorio.ObtenerPorId(id);
-                p.Nombre = collection["Nombre"];
-                p.Apellido = collection["Apellido"];
-                p.Dni = collection["Dni"];
-                p.Telefono = collection["Telefono"];
-                p.Direccion = collection["Direccion"];
-                p.Email = collection["Email"];
-                p.LugarTrabajo = collection["LugarTrabajo"];
-                p.NombreGarante = collection["NombreGarante"];
-                p.ApellidoGarante = collection["ApellidoGarante"];
-                p.DniGarante = collection["DniGarante"];
-                p.TelefonoGarante = collection["TelefonoGarante"];
-                p.DireccionGarante = collection["DireccionGarante"];
-
-                repositorio.Modificacion(p);
+                entidad.IdContrato = id;
+                repositorio.Modificacion(entidad);
                 TempData["Mensaje"] = "Datos guardados correctamente";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
+                ViewBag.Inquilinos = repoInquilino.ObtenerTodos();
+                ViewBag.Inmuebles = repoInmueble.ObtenerTodos();
                 ViewBag.Error = ex.Message;
                 ViewBag.StackTrate = ex.StackTrace;
-                return View(p);
+                return View(entidad);
             }
         }
 
-        // GET: InquilinoController/Delete/5
+        // GET: Contrato/Delete/5
         public ActionResult Delete(int id)
         {
-            var p = repositorio.ObtenerPorId(id);
+            var entidad = repositorio.ObtenerPorId(id);
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
             if (TempData.ContainsKey("Error"))
                 ViewBag.Error = TempData["Error"];
-            return View(p);
+            return View(entidad);
         }
 
-        // POST: InquilinoController/Delete/5
+        // POST: Contrato/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Inquilino entidad)
+        public ActionResult Delete(int id, Contrato entidad)
         {
             try
             {

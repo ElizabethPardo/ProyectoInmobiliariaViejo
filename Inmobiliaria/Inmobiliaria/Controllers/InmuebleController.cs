@@ -13,6 +13,7 @@ namespace Inmobiliaria.Controllers
     {
         private readonly RepositorioInmueble repositorio;
         private readonly IConfiguration config;
+    
 
         public InmuebleController(IConfiguration config)
         {
@@ -30,6 +31,19 @@ namespace Inmobiliaria.Controllers
                 ViewBag.Mensaje = TempData["Mensaje"];
             return View(lista);
         }
+        public ActionResult PorPropietario(int id)
+        {
+              TempData["IdPro"] = id;
+            
+
+            var lista = repositorio.BuscarPorPropietario(id);
+            if (TempData.ContainsKey("Id"))
+                ViewBag.Id = TempData["Id"];
+            if (TempData.ContainsKey("Mensaje"))
+                ViewBag.Mensaje = TempData["Mensaje"];
+
+            return View(lista);
+        }
 
         // GET: InmuebleController/Details/5
         public ActionResult Details(int id)
@@ -40,7 +54,7 @@ namespace Inmobiliaria.Controllers
         // GET: InmuebleController/Create
         public ActionResult Create()
         {
-            ViewBag.Propietarios = repositorio.ObtenerTodos();
+            //ViewBag.Inmueble = repositorio.ObtenerTodos();
             return View();
         }
 
@@ -49,18 +63,21 @@ namespace Inmobiliaria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Inmueble entidad)
         {
+            
+            ViewBag.IdPro = TempData["IdPro"];
+            int id = ViewBag.IdPro;
 
             try
             {
                 if (ModelState.IsValid)
                 {
-                    repositorio.Alta(entidad);
-                    TempData["Id"] = entidad.Id;
-                    return RedirectToAction(nameof(Index));
+                    repositorio.Alta(entidad,id);
+                    TempData["Id"] = entidad.IdInmueble;
+                    return RedirectToAction("PorPropietario", new {id = id });
                 }
                 else
                 {
-                    ViewBag.Propietarios = repositorio.ObtenerTodos();
+                    ViewBag.Inmueble = repositorio.ObtenerTodos();
                     return View(entidad);
                 }
             }
@@ -76,7 +93,8 @@ namespace Inmobiliaria.Controllers
         public ActionResult Edit(int id)
         {
             var entidad = repositorio.ObtenerPorId(id);
-            ViewBag.Propietarios = repositorio.ObtenerTodos();
+            TempData["IdPro"] = entidad.PropietarioId;
+            //ViewBag.Propietarios = repositorio.ObtenerTodos();
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
             if (TempData.ContainsKey("Error"))
@@ -91,10 +109,13 @@ namespace Inmobiliaria.Controllers
         {
             try
             {
-                entidad.Id = id;
+                entidad.IdInmueble = id;
+                ViewBag.IdPro = TempData["IdPro"];
+                int idPro = ViewBag.IdPro;
+
                 repositorio.Modificacion(entidad);
                 TempData["Mensaje"] = "Datos guardados correctamente";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("PorPropietario", new { id = idPro });
             }
             catch (Exception ex)
             {
@@ -109,6 +130,7 @@ namespace Inmobiliaria.Controllers
         public ActionResult Delete(int id)
         {
             var entidad = repositorio.ObtenerPorId(id);
+            TempData["IdPro"] = entidad.PropietarioId;
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
             if (TempData.ContainsKey("Error"))
@@ -123,9 +145,13 @@ namespace Inmobiliaria.Controllers
         {
             try
             {
+                ViewBag.IdPro = TempData["IdPro"];
+                int idPro = ViewBag.IdPro;
+
                 repositorio.Baja(id);
+               
                 TempData["Mensaje"] = "Eliminación realizada correctamente";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("PorPropietario", new { id = idPro });
             }
             catch (Exception ex)
             {

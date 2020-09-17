@@ -1,0 +1,51 @@
+﻿@model Inmobiliaria.Models.Contrato
+
+
+@{ ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+<h4>Inmueble</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FechaDesde" class="control-label"></label>
+                <input asp-for="FechaDesde" class="form-control" />
+                <span asp-validation-for="FechaDesde" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaHasta" class="control-label"></label>
+                <input asp-for="FechaHasta" class="form-control" />
+                <span asp-validation-for="FechaHasta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Inquilino</label>
+                <select class="form-control" name="InquilinoId">
+                    @foreach (var item in (IList<Inquilino>)ViewBag.Inquilinos)
+                    {
+                     <option value="@item.IdInquilino">@(item.Nombre + " " + item.Apellido)</option>
+                      }
+                </select>
+                <span asp-validation-for="InquilinoId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Inmueble</label>
+                <select class="form-control" name="InmuebleId">
+                    @foreach (var item in (IList<Inmueble>)ViewBag.Inmuebles)
+                    {
+        <option value="@item.IdInmueble">@(item.Direccion + " - $" + item.Precio)</option>}
+                </select>
+                <span asp-validation-for="InmuebleId" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <a class="btn btn-secondary" asp-action="Index">Volver al listado</a>
+            </div>
+        </form>
+    </div>
+</div>

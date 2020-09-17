@@ -10,7 +10,7 @@ namespace Inmobiliaria.Models
     public class Inmueble
     {
         [Display(Name = "Código")]
-        public int Id { get; set; }
+        public int IdInmueble { get; set; }
         [Required]
         public string Direccion { get; set; }
         [Required]

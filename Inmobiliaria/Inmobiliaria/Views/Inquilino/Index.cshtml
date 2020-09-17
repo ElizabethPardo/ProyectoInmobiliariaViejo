@@ -36,24 +36,6 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LugarTrabajo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreGarante)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApellidoGarante)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DniGarante)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TelefonoGarante)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DireccionGarante)
-            </th>
-            <th>
 
             </th>
         </tr>
@@ -83,26 +65,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
+          
             <td>
-                @Html.DisplayFor(modelItem => item.LugarTrabajo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreGarante)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApellidoGarante)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DniGarante)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TelefonoGarante)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DireccionGarante)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar">Editar</a>&nbsp;
+                <a asp-action="Details" asp-route-id="@item.IdInquilino" title="Detalle">Detalle</a>&nbsp;|
+                <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar">Editar</a>&nbsp;|
                 <a asp-action="Delete" asp-route-id="@item.IdInquilino" title="Eliminar">Eliminar</a>
             </td>
         </tr>

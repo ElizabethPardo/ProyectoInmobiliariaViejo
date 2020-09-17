@@ -1,9 +1,12 @@
 ﻿@model Inmobiliaria.Models.Inmueble
 
-@{ ViewData["Title"] = "Create"; }
+
+@{ ViewData["Title"] = "Create";
+    
+    }
 
 <h1>Create</h1>
-
+<h1>  @ViewBag.IdPro </h1>
 <h4>Inmueble</h4>
 <hr />
 <div class="row">
@@ -40,18 +43,10 @@
                 <input asp-for="Estado" class="form-control" />
                 <span asp-validation-for="Estado" class="text-danger"></span>
             </div>
+          
+
             <div class="form-group">
-                <label class="control-label">Propietario</label>
-                <select class="form-control" name="PropietarioId">
-                    @foreach (var item in (IList<Propietario>)ViewBag.Propietarios)
-                    {
-        <option value="@item.IdPropietario">@(item.Nombre + " " + item.Apellido)</option>
-}
-                </select>
-                <span asp-validation-for="PropietarioId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-primary" />
                 <a class="btn btn-secondary" asp-action="Index">Volver al listado</a>
             </div>
         </form>
