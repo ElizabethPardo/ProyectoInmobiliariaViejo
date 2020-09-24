@@ -15,12 +15,12 @@ namespace Inmobiliaria.Controllers
     {
         
 
-        private readonly RepositorioPropietario repositorio;
+        private readonly IRepositorioPropietario repositorio;
         private readonly IConfiguration config;
 
-        public PropietarioController(IConfiguration config)
+        public PropietarioController(IRepositorioPropietario repositorio, IConfiguration config)
         {
-            repositorio = new RepositorioPropietario(config);
+            this.repositorio = repositorio;
             this.config = config;
         }
 
@@ -144,7 +144,7 @@ namespace Inmobiliaria.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CambiarPass(int id, CambioClave cambio)
+        public ActionResult CambiarPass(int id, CambioClaveView cambio)
         {
             Propietario propietario = null;
             try

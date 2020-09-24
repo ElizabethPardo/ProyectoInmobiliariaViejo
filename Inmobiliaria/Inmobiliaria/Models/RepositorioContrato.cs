@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Inmobiliaria.Models
 {
-    public class RepositorioContrato : RepositorioBase
-    {
+    public class RepositorioContrato : RepositorioBase, IRepositorioContrato
+	{
 
         public RepositorioContrato(IConfiguration configuration) : base(configuration)
         {

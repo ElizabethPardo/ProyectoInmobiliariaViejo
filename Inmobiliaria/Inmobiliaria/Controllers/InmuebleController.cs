@@ -11,13 +11,13 @@ namespace Inmobiliaria.Controllers
 {
     public class InmuebleController : Controller
     {
-        private readonly RepositorioInmueble repositorio;
+        private readonly IRepositorioInmueble repositorio;
         private readonly IConfiguration config;
     
 
-        public InmuebleController(IConfiguration config)
+        public InmuebleController(IRepositorioInmueble repositorio,IConfiguration config)
         {
-            repositorio = new RepositorioInmueble(config);
+            this.repositorio = repositorio;
             this.config = config;
         }
         
@@ -46,7 +46,7 @@ namespace Inmobiliaria.Controllers
         }
 
         // GET: InmuebleController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details()
         {
             return View();
         }
@@ -54,7 +54,9 @@ namespace Inmobiliaria.Controllers
         // GET: InmuebleController/Create
         public ActionResult Create()
         {
-            //ViewBag.Inmueble = repositorio.ObtenerTodos();
+            ViewBag.Usos = Inmueble.ObtenerUsos();
+            ViewBag.Tipos = Inmueble.ObtenerTipos();
+            
             return View();
         }
 
@@ -78,6 +80,8 @@ namespace Inmobiliaria.Controllers
                 else
                 {
                     ViewBag.Inmueble = repositorio.ObtenerTodos();
+                    ViewBag.Usos = Inmueble.ObtenerUsos();
+                    ViewBag.Tipos = Inmueble.ObtenerTipos();
                     return View(entidad);
                 }
             }
@@ -85,6 +89,8 @@ namespace Inmobiliaria.Controllers
             {
                 ViewBag.Error = ex.Message;
                 ViewBag.StackTrate = ex.StackTrace;
+                ViewBag.Usos = Inmueble.ObtenerUsos();
+                ViewBag.Tipos = Inmueble.ObtenerTipos();
                 return View(entidad);
             }
         }
@@ -99,6 +105,8 @@ namespace Inmobiliaria.Controllers
                 ViewBag.Mensaje = TempData["Mensaje"];
             if (TempData.ContainsKey("Error"))
                 ViewBag.Error = TempData["Error"];
+            ViewBag.Usos = Inmueble.ObtenerUsos();
+            ViewBag.Tipos = Inmueble.ObtenerTipos();
             return View(entidad);
         }
 
@@ -120,6 +128,8 @@ namespace Inmobiliaria.Controllers
             catch (Exception ex)
             {
                 ViewBag.Propietarios = repositorio.ObtenerTodos();
+                ViewBag.Usos = Inmueble.ObtenerUsos();
+                ViewBag.Tipos = Inmueble.ObtenerTipos();
                 ViewBag.Error = ex.Message;
                 ViewBag.StackTrate = ex.StackTrace;
                 return View(entidad);

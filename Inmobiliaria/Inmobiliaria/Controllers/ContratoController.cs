@@ -11,16 +11,16 @@ namespace Inmobiliaria.Controllers
 {
     public class ContratoController : Controller
     {
-        private readonly RepositorioContrato repositorio;
-        private readonly RepositorioInmueble repoInmueble;
-        private readonly RepositorioInquilino repoInquilino;
+        private readonly IRepositorioContrato repositorio;
+        private readonly IRepositorioInmueble repoInmueble;
+        private readonly IRepositorioInquilino repoInquilino;
         private readonly IConfiguration config;
 
-        public  ContratoController(IConfiguration config)
+        public  ContratoController(IRepositorioContrato repositorio, IRepositorioInmueble repoInmueble, IRepositorioInquilino repoInquilino, IConfiguration config)
         {
-            repositorio = new RepositorioContrato(config);
-            repoInquilino = new RepositorioInquilino(config);
-            repoInmueble = new RepositorioInmueble(config);
+            this.repositorio = repositorio;
+            this.repoInquilino = repoInquilino;
+            this.repoInmueble = repoInmueble;
             
             this.config = config;
         }
@@ -62,7 +62,7 @@ namespace Inmobiliaria.Controllers
                 {
                     repositorio.Alta(entidad);
                     TempData["Id"] = entidad.IdContrato;
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Index", "Pago", new { id = entidad.IdContrato });
 
                 }
                 else

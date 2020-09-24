@@ -12,12 +12,12 @@ namespace Inmobiliaria.Controllers
     public class InquilinoController : Controller
     {
 
-        private readonly RepositorioInquilino repositorio;
+        private readonly IRepositorioInquilino repositorio;
         private readonly IConfiguration config;
 
-        public InquilinoController(IConfiguration config)
+        public InquilinoController(IRepositorioInquilino repositorio,IConfiguration config)
         {
-            repositorio = new RepositorioInquilino(config);
+            this.repositorio = repositorio;
             this.config = config;
         }
         // GET: InquilinoController

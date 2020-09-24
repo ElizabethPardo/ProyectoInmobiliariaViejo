@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace Inmobiliaria.Models
 {
-    public class RepositorioInquilino :RepositorioBase
-    {
+    public class RepositorioInquilino : RepositorioBase, IRepositorioInquilino
+	{
 		public RepositorioInquilino(IConfiguration configuration) : base(configuration)
 		{
 
@@ -174,6 +174,73 @@ namespace Inmobiliaria.Models
 				}
 			}
 			return p;
+		}
+
+		public Inquilino ObtenerPorEmail(string email)
+		{
+			Inquilino i = null;
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				string sql = $"SELECT IdPropietario, Nombre, Apellido, Dni, Telefono, Email, Clave FROM Inquilino" +
+					$" WHERE Email=@email";
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					command.CommandType = CommandType.Text;
+					command.Parameters.Add("@email", SqlDbType.VarChar).Value = email;
+					connection.Open();
+					var reader = command.ExecuteReader();
+					if (reader.Read())
+					{
+						i = new Inquilino
+						{
+							IdInquilino = reader.GetInt32(0),
+							Nombre = reader.GetString(1),
+							Apellido = reader.GetString(2),
+							Dni = reader.GetString(3),
+							Telefono = reader.GetString(4),
+							Email = reader.GetString(5),
+							
+						};
+					}
+					connection.Close();
+				}
+			}
+			return i;
+		}
+
+		public IList<Inquilino> BuscarPorNombre(string nombre)
+		{
+			List<Inquilino> res = new List<Inquilino>();
+			Inquilino i = null;
+			nombre = "%" + nombre + "%";
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				string sql = $"SELECT IdPropietario, Nombre, Apellido, Dni, Telefono, Email FROM Inquilino" +
+					$" WHERE Nombre LIKE @nombre OR Apellido LIKE @nombre";
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					command.Parameters.Add("@nombre", SqlDbType.VarChar).Value = nombre;
+					command.CommandType = CommandType.Text;
+					connection.Open();
+					var reader = command.ExecuteReader();
+					while (reader.Read())
+					{
+						i = new Inquilino
+						{
+							IdInquilino = reader.GetInt32(0),
+							Nombre = reader.GetString(1),
+							Apellido = reader.GetString(2),
+							Dni = reader.GetString(3),
+							Telefono = reader.GetString(4),
+							Email = reader.GetString(5),
+							
+						};
+						res.Add(i);
+					}
+					connection.Close();
+				}
+			}
+			return res;
 		}
 
 	}

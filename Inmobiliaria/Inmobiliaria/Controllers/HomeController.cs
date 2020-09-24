@@ -35,10 +35,26 @@ namespace Inmobiliaria.Controllers
             return View();
         }
 
+        public ActionResult Restringido()
+        {
+            return View();
+        }
+        public IActionResult Fecha(int anio, int mes, int dia)
+        {
+            DateTime dt = new DateTime(anio, mes, dia);
+            ViewBag.Fecha = dt;
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Ruta(string valor)
+        {
+            ViewBag.Valor = valor;
+            return View();
         }
     }
 }

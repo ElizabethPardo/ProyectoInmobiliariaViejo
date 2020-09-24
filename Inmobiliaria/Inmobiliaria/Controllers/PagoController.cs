@@ -2,21 +2,51 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Inmobiliaria.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Inmobiliaria.Controllers
 {
     public class PagoController : Controller
     {
-        // GET: Pago
-        public ActionResult Index()
+        private readonly IRepositorioPago repositorio;
+        private readonly IConfiguration config;
+
+
+        public PagoController(IRepositorioPago repositorio, IConfiguration config)
         {
-            return View();
+            this.repositorio = repositorio;
+            this.config = config;
+        }
+
+        // GET: Pago
+        public ActionResult Index(int id)
+        {
+            TempData["IdPago"]=id;
+
+            var lista = repositorio.BuscarPorContrato(id);
+            if (TempData.ContainsKey("Id"))
+                ViewBag.Id = TempData["Id"];
+            if (TempData.ContainsKey("Mensaje"))
+                ViewBag.Mensaje = TempData["Mensaje"];
+            return View(lista);
+        }
+
+        public ActionResult PorContrato(int id)
+        {
+            
+            var lista = repositorio.BuscarPorContrato(id);
+            if (TempData.ContainsKey("Id"))
+                ViewBag.Id = TempData["Id"];
+            if (TempData.ContainsKey("Mensaje"))
+                ViewBag.Mensaje = TempData["Mensaje"];
+            return View(lista);
         }
 
         // GET: Pago/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details()
         {
             return View();
         }
@@ -30,20 +60,41 @@ namespace Inmobiliaria.Controllers
         // POST: Pago/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Pago entidad)
         {
+            int id = 0;
+            ViewBag.IdPago = TempData["IdPago"];
+            if (ViewBag.IdPago != null) 
+            {
+                id = ViewBag.IdPago;
+            }
+                
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    repositorio.Alta(entidad, id);
+                    TempData["Id"] = entidad.IdPago;
+                    TempData["IdCont"] = entidad.ContratoId;
+                    return RedirectToAction("PorContrato", new { id = id });
+                }
+                else
+                {
+                    ViewBag.Pago = repositorio.BuscarPorContrato(id);
+                    return View(entidad);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrate = ex.StackTrace;
+                return View(entidad);
             }
         }
 
         // GET: Pago/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit()
         {
             return View();
         }
@@ -66,21 +117,35 @@ namespace Inmobiliaria.Controllers
         // GET: Pago/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var entidad = repositorio.ObtenerPorId(id);
+            TempData["IdCont"] = entidad.ContratoId;
+            if (TempData.ContainsKey("Mensaje"))
+                ViewBag.Mensaje = TempData["Mensaje"];
+            if (TempData.ContainsKey("Error"))
+                ViewBag.Error = TempData["Error"];
+            return View(entidad);
         }
 
         // POST: Pago/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Pago entidad)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                ViewBag.IdCont = TempData["IdCont"];
+                int idCont = ViewBag.IdCont;
+
+                repositorio.Baja(id);
+
+                TempData["Mensaje"] = "Eliminación realizada correctamente";
+                return RedirectToAction("PorContrato", new { id = idCont});
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrate = ex.StackTrace;
+                return View(entidad);
             }
         }
     }

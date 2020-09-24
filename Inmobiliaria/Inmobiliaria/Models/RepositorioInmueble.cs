@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Inmobiliaria.Models
 {
-    public class RepositorioInmueble : RepositorioBase
-    {
+    public class RepositorioInmueble : RepositorioBase, IRepositorioInmueble
+	{
         public RepositorioInmueble(IConfiguration configuration) : base(configuration)
         {
 
@@ -207,7 +207,9 @@ namespace Inmobiliaria.Models
 			return res;
 		}
 
-
-
-	}
+        public int Alta(Inmueble p)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

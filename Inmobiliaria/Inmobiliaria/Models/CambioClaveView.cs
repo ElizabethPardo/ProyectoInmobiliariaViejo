@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Inmobiliaria.Models
 {
-    public class CambioClave
+    public class CambioClaveView
     {
         [DataType(DataType.Password)]
         public string ClaveVieja { get; set; }
