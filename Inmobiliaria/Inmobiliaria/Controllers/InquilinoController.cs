@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Inmobiliaria.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -20,17 +21,22 @@ namespace Inmobiliaria.Controllers
             this.repositorio = repositorio;
             this.config = config;
         }
+
         // GET: InquilinoController
+        [Authorize]
         public ActionResult Index()
         {
+            
             var lista = repositorio.ObtenerTodos();
-            ViewBag.Id = TempData["Id"];
+            ViewBag.Id = TempData["Id"];      
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
             return View(lista);
         }
 
+
         // GET: InquilinoController/Details/5
+        [Authorize]
         public ActionResult Details(int id)
         {
             var entidad = repositorio.ObtenerPorId(id);
@@ -38,6 +44,7 @@ namespace Inmobiliaria.Controllers
             
         }
 
+        [Authorize]
         // GET: InquilinoController/Create
         public ActionResult Create()
         {
@@ -47,6 +54,7 @@ namespace Inmobiliaria.Controllers
         // POST: InquilinoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create(Inquilino inquilino)
         {
             try
@@ -71,7 +79,9 @@ namespace Inmobiliaria.Controllers
             }
         }
 
+
         // GET: InquilinoController/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
             var p = repositorio.ObtenerPorId(id);
@@ -85,26 +95,12 @@ namespace Inmobiliaria.Controllers
         // POST: InquilinoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [Authorize]
+        public ActionResult Edit(int id, Inquilino i)
         {
-            Inquilino p = null;
             try
             {
-                p = repositorio.ObtenerPorId(id);
-                p.Nombre = collection["Nombre"];
-                p.Apellido = collection["Apellido"];
-                p.Dni = collection["Dni"];
-                p.Telefono = collection["Telefono"];
-                p.Direccion = collection["Direccion"];
-                p.Email = collection["Email"];
-                p.LugarTrabajo = collection["LugarTrabajo"];
-                p.NombreGarante = collection["NombreGarante"];
-                p.ApellidoGarante = collection["ApellidoGarante"];
-                p.DniGarante = collection["DniGarante"];
-                p.TelefonoGarante = collection["TelefonoGarante"];
-                p.DireccionGarante = collection["DireccionGarante"];
-
-                repositorio.Modificacion(p);
+                repositorio.Modificacion(i);
                 TempData["Mensaje"] = "Datos guardados correctamente";
                 return RedirectToAction(nameof(Index));
             }
@@ -112,11 +108,13 @@ namespace Inmobiliaria.Controllers
             {
                 ViewBag.Error = ex.Message;
                 ViewBag.StackTrate = ex.StackTrace;
-                return View(p);
+                return View(i);
             }
         }
 
+
         // GET: InquilinoController/Delete/5
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
             var p = repositorio.ObtenerPorId(id);
@@ -130,6 +128,7 @@ namespace Inmobiliaria.Controllers
         // POST: InquilinoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id, Inquilino entidad)
         {
             try

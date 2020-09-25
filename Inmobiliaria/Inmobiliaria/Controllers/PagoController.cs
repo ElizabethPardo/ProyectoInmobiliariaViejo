@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Inmobiliaria.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,7 @@ namespace Inmobiliaria.Controllers
         }
 
         // GET: Pago
+        [Authorize]
         public ActionResult Index(int id)
         {
             TempData["IdPago"]=id;
@@ -34,9 +36,10 @@ namespace Inmobiliaria.Controllers
             return View(lista);
         }
 
+        [Authorize]
         public ActionResult PorContrato(int id)
         {
-            
+            TempData["IdPago"] = id;
             var lista = repositorio.BuscarPorContrato(id);
             if (TempData.ContainsKey("Id"))
                 ViewBag.Id = TempData["Id"];
@@ -46,12 +49,14 @@ namespace Inmobiliaria.Controllers
         }
 
         // GET: Pago/Details/5
+        [Authorize]
         public ActionResult Details()
         {
             return View();
         }
 
         // GET: Pago/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -60,6 +65,7 @@ namespace Inmobiliaria.Controllers
         // POST: Pago/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create(Pago entidad)
         {
             int id = 0;
@@ -94,6 +100,7 @@ namespace Inmobiliaria.Controllers
         }
 
         // GET: Pago/Edit/5
+        [Authorize]
         public ActionResult Edit()
         {
             return View();
@@ -102,6 +109,7 @@ namespace Inmobiliaria.Controllers
         // POST: Pago/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(int id, IFormCollection collection)
         {
             try
@@ -115,6 +123,7 @@ namespace Inmobiliaria.Controllers
         }
 
         // GET: Pago/Delete/5
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
             var entidad = repositorio.ObtenerPorId(id);
@@ -129,6 +138,7 @@ namespace Inmobiliaria.Controllers
         // POST: Pago/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id, Pago entidad)
         {
             try

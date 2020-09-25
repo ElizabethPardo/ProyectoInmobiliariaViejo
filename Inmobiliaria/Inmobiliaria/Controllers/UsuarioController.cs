@@ -263,6 +263,7 @@ namespace Inmobiliaria.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult CambiarPass(int id, CambioClaveView cambio)
         {
             Usuario usuario = null;

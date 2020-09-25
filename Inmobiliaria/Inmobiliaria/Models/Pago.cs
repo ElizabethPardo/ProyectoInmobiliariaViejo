@@ -11,6 +11,8 @@ namespace Inmobiliaria.Models
     {
         [Display(Name = "Código")]
         public int IdPago { get; set; }
+
+        [DataType(DataType.Date)]
         public DateTime FechaPago { get; set; }
         public decimal Importe { get; set; }
 

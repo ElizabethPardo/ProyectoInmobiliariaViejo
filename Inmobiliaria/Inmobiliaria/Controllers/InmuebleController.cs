@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Inmobiliaria.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -20,17 +21,21 @@ namespace Inmobiliaria.Controllers
             this.repositorio = repositorio;
             this.config = config;
         }
-        
+
         // GET: InmuebleController
+        [Authorize]
         public ActionResult Index()
         {
             var lista = repositorio.ObtenerTodos();
+     
             if (TempData.ContainsKey("Id"))
                 ViewBag.Id = TempData["Id"];
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
             return View(lista);
         }
+
+        [Authorize]
         public ActionResult PorPropietario(int id)
         {
               TempData["IdPro"] = id;
@@ -46,12 +51,14 @@ namespace Inmobiliaria.Controllers
         }
 
         // GET: InmuebleController/Details/5
+        [Authorize]
         public ActionResult Details()
         {
             return View();
         }
 
         // GET: InmuebleController/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.Usos = Inmueble.ObtenerUsos();
@@ -63,6 +70,7 @@ namespace Inmobiliaria.Controllers
         // POST: InmuebleController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create(Inmueble entidad)
         {
             
@@ -96,6 +104,7 @@ namespace Inmobiliaria.Controllers
         }
 
         // GET: InmuebleController/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
             var entidad = repositorio.ObtenerPorId(id);
@@ -113,6 +122,7 @@ namespace Inmobiliaria.Controllers
         // POST: InmuebleController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(int id, Inmueble entidad)
         {
             try
@@ -137,6 +147,7 @@ namespace Inmobiliaria.Controllers
         }
 
         // GET: InmuebleController/Delete/5
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
             var entidad = repositorio.ObtenerPorId(id);
@@ -151,6 +162,7 @@ namespace Inmobiliaria.Controllers
         // POST: InmuebleController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id, Inmueble entidad)
         {
             try

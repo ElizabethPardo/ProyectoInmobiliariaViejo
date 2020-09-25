@@ -4,9 +4,6 @@
 
 <h1>Inmuebles</h1>
 
-<p>
-    <a asp-action="Create">Crear nuevo</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -40,35 +37,36 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdInmueble)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Direccion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ambientes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UsoNombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoNombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Precio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @(item.Duenio.Nombre + " " + item.Duenio.Apellido)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdInmueble" title="Editar"><span class="lnr lnr-pencil"></span>Editar</a>&nbsp;
-                <a asp-action="Delete" asp-route-id="@item.IdInmueble" title="Eliminar"><span class="lnr lnr-cross"></span>Eliminar</a>
-            </td>
-        </tr>}
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.IdInmueble)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Direccion)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Ambientes)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.UsoNombre)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.TipoNombre)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Precio)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Estado)
+    </td>
+    <td>
+        @(item.Duenio.Nombre + " " + item.Duenio.Apellido)
+    </td>
+    <td>
+        <a asp-action="Edit" asp-route-id="@item.IdInmueble" title="Editar"><span class="lnr lnr-pencil"></span>Editar</a>&nbsp;
+        <a asp-action="Delete" asp-route-id="@item.IdInmueble" title="Eliminar"><span class="lnr lnr-cross"></span>Eliminar</a>
+    </td>
+</tr>
+}
     </tbody>
 </table>

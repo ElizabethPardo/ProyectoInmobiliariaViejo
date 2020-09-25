@@ -1,9 +1,8 @@
 ﻿@model Inmobiliaria.Models.Propietario
-@{ ViewData["Title"] = "Editar Inquilino"; }
+@{ ViewData["Title"] = "Editar Propietario"; }
 
-<h1>Editar</h1>
+<h1>Editar Datos</h1>
 
-<h4>Inquilinos</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -26,6 +25,11 @@
                 <span asp-validation-for="Dni" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Direccion" class="control-label"></label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Telefono" class="control-label"></label>
                 <input asp-for="Telefono" class="form-control" />
                 <span asp-validation-for="Telefono" class="text-danger"></span>
@@ -42,35 +46,8 @@
     </div>
 </div>
 
-<h4>Cambiar contraseña</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CambiarPass" asp-route-id="@Model.IdPropietario" name="CambiarPass">
-            <input type="hidden" name="IdPropietario" value="@Model.IdPropietario" />
-            <div class="form-group">
-                <label class="control-label">Clave Antigüa</label>
-                <input type="password" name="ClaveVieja" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label class="control-label">Nueva Clave</label>
-                <input type="password" name="ClaveNueva" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label class="control-label">Repetir Clave Nueva</label>
-                <input type="password" name="ClaveRepeticion" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Cambiar" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
 <div>
     <a asp-action="Index">Volver al listado</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+

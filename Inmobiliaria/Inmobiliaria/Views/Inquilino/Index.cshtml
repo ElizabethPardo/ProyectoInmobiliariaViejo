@@ -4,6 +4,7 @@
 *@
 @{
     ViewData["Title"] = "Inquilinos";
+
 }
 <h1>Inquilinos</h1>
 
@@ -67,9 +68,12 @@
             </td>
           
             <td>
-                <a asp-action="Details" asp-route-id="@item.IdInquilino" title="Detalle">Detalle</a>&nbsp;|
-                <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar">Editar</a>&nbsp;|
+                <a asp-action="Details" asp-route-id="@item.IdInquilino" title="Detalle">Detalle</a>&nbsp;
+                <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar">Editar</a>&nbsp;
                 <a asp-action="Delete" asp-route-id="@item.IdInquilino" title="Eliminar">Eliminar</a>
+               
+
+
             </td>
         </tr>
         }

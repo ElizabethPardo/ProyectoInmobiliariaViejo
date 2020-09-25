@@ -15,9 +15,11 @@ namespace Inmobiliaria.Models
         public int IdContrato { get; set; }
 
         [Display(Name = "Fecha Ingreso")]
+        [DataType(DataType.Date)]
         public DateTime FechaDesde { get; set; }
 
         [Display(Name = "Fecha Salida")]
+        [DataType(DataType.Date)]
         public DateTime FechaHasta { get; set; }
 
         [Display(Name = "Inquilino")]
