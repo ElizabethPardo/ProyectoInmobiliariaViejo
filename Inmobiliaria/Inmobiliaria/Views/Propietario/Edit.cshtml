@@ -1,7 +1,7 @@
 ﻿@model Inmobiliaria.Models.Propietario
 @{ ViewData["Title"] = "Editar Propietario"; }
 
-<h1>Editar Datos</h1>
+<h2>Actualizar datos</h2>
 
 <hr />
 <div class="row">
@@ -40,14 +40,12 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-dark" />
+                <a asp-action="Index" class="btn btn-secondary">Volver</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Volver al listado</a>
-</div>
 
 

@@ -6,48 +6,76 @@
     <title>@ViewData["Title"] - Inmobiliaria</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-dark bg-dark ">
+        <nav class="navbar navbar-inverse">
 
-            <div class="container">
+            <div class="container d-flex flex-column flex-md-row justify-content-between">
 
                 @if (!User.Identity.IsAuthenticated)
-                {
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Index"><span class="lnr lnr-home"></span> Inicio</a>
-                    <a class="navbar-brand d-md-inline-block float-right" href="@Url.Link("login", null)"><span class="lnr lnr-enter"></span>Iniciar Sesión</a>
-                }
-                else
-                {
-
-                    <a class=" navbar-brand" asp-controller="Home" asp-action="Index" id="homeMenu" aria-expanded="false" data-display="static">
-                        <span class="lnr lnr-home"></span> Inicio
-                    </a>
-
-                    @if (User.IsInRole("Administrador"))
-                    {
-                        <a class="navbar-brand bg-dark d-md-inline-block" asp-controller="Usuario" asp-action="Index"><span class="lnr lnr-star"></span> Usuarios</a>
-                    }
-                        <a class="navbar-brand d-md-inline-block" asp-controller="Propietario" asp-action="Index"><span class="lnr lnr-user"></span> Propietarios</a>
-                        <a class="navbar-brand d-md-inline-block" asp-controller="Inquilino" asp-action="Index"><span class="lnr lnr-user"></span> Inquilinos</a>
-                        <a class="navbar-brand d-md-inline-block" asp-controller="Inmueble" asp-action="Index"><span class="lnr lnr-apartment"></span> Inmuebles</a>
-                        <a class="navbar-brand d-md-inline-block" asp-controller="Contrato" asp-action="Index"><span class="lnr lnr-enter"></span> Alquileres</a>
-                    
-                    <div class="dropdown">
-                            <a class="btn btn-light dropdown-toggle" href="#" role="button" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent" data-display="static">
-                                <span class="lnr lnr-user"></span> @User.Identity.Name
+                {<div class="navbar-header" style="margin-bottom:25px;">
+                        <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <img src="/img/logo.jpg"width="183" height="56"  data-toggle="collapse" data-target="#navbarNav" alt="" loading="lazy" style="position:relative; bottom:8px; margin-right:800px;"></a>
+                    </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a class="nav-link" href="@Url.Link("login", null)">Iniciar Sesión  <span class="glyphicon glyphicon-share"> </span></a></li>
+                        </ul>
+                        }
+                        else
+                        {
+                        <div class="navbar-header" style="margin-bottom:25px;">
+                            <a class=" navbar-brand" asp-controller="Home" asp-action="Index" id="homeMenu" aria-expanded="false" data-display="static">
+                             <img src="/img/logo.jpg" width="183" height="56" data-toggle="collapse" data-target="#navbarNav" alt="" loading="lazy" style="position: relative; bottom: 10px; margin-right: 300px;">
+                         
                             </a>
-
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item text-dark" asp-controller="Usuario" asp-action="Perfil"><i class="lnr lnr-user"></i> Perfil</a>
-                                <a class="dropdown-item text-dark" asp-controller="Usuario" asp-action="Logout"><i class="lnr lnr-exit"></i> Salir</a>
-                            </div>
                         </div>
-                    }
-                </div>     
 
-       </nav>
+                        <ul class="nav navbar-nav" style="display:inline">
+
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <li class="nav-item" style="padding:10px;">
+                                    <a class="nav-link" asp-controller="Usuario" asp-action="Index"><span class="lnr lnr-star"></span> Usuarios</a>
+                                </li>
+                            }
+                            <li class="nav-item" style="padding:10px;">
+                                <a class="nav-link " asp-controller="Propietario" asp-action="Index"><span class="lnr lnr-user"></span> Propietarios</a>
+                            </li>
+                            <li class="nav-item" style="padding:10px;">
+                                <a class="nav-link" asp-controller="Inquilino" asp-action="Index"><span class="lnr lnr-user"></span> Inquilinos</a>
+                            </li>
+                            <li class="nav-item" style="padding:10px;">
+                                <a class="nav-link" asp-controller="Inmueble" asp-action="Index"><span class="lnr lnr-apartment"></span> Inmuebles</a>
+                            </li>
+                            <li class="nav-item" style="padding:10px;">
+                                <a class="nav-link" asp-controller="Contrato" asp-action="Index"><span class="lnr lnr-enter"></span> Alquileres</a>
+                            </li>
+                            <li class="dropdown" style="padding:10px;">
+
+                                <a class=" dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown">
+                                    <span class="lnr lnr-user"></span> @User.Identity.Name
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    <li> <a asp-controller="Usuario" asp-action="Perfil"><i class="lnr lnr-user"></i> Perfil</a></li>
+                                    <li><a asp-controller="Usuario" asp-action="Logout"><i class="lnr lnr-exit"></i> Salir</a></li>
+                                </ul>
+
+                            </li>
+                        </ul>
+
+                        }
+                </div>
+
+</nav>
     </header>
     <div class="container">
         <main role="main" class="container">
@@ -149,5 +177,5 @@
 			}
 		}
     </script>
-</body>
+    </body>
 </html>

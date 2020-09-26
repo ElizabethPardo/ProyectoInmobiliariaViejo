@@ -6,14 +6,14 @@
     ViewData["Title"] = "Contratos";
 
 }
-<h1>
- Contratos de alquiler
-</h1>
+<h2>
+CONTRATOS DE ALQUILER
+</h2>
 
 
 
 <p>
-    <a asp-action="Create">Crear nuevo</a>
+    <a asp-action="Create" class="btn btn-dark">Crear nuevo <i class="fas fa-plus"> </i></a>
 </p>
 
 <table class="table">
@@ -60,9 +60,9 @@
             </td>
 
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdContrato" title="Editar"><span class="lnr lnr-pencil">Editar</span></a>&nbsp;
-                <a asp-action="Delete" asp-route-id="@item.IdContrato" title="Eliminar"><span class="lnr lnr-cross">Eliminar</span></a>
-                <a asp-action="PorContrato" asp-controller="Pago" asp-route-id="@item.IdContrato" title="Pago"><span class="lnr lnr-cross">Pago</span></a>
+                <a asp-action="Edit" asp-route-id="@item.IdContrato" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+                <a asp-action="Delete" asp-route-id="@item.IdContrato" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+                <a asp-action="PorContrato" asp-controller="Pago" asp-route-id="@item.IdContrato" title="Pago"><i class="fas fa-money-check-alt"></i></a>
 
             </td>
         </tr>

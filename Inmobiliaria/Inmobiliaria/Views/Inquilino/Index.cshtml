@@ -6,10 +6,10 @@
     ViewData["Title"] = "Inquilinos";
 
 }
-<h1>Inquilinos</h1>
+<h1>INQUILINOS</h1>
 
 <p>
-    <a asp-action="Create">Crear nuevo</a>
+    <a asp-action="Create" class="btn btn-dark">Crear nuevo<i class="fas fa-plus"> </i></a>
 </p>
 
 <table class="table">
@@ -68,9 +68,9 @@
             </td>
           
             <td>
-                <a asp-action="Details" asp-route-id="@item.IdInquilino" title="Detalle">Detalle</a>&nbsp;
-                <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar">Editar</a>&nbsp;
-                <a asp-action="Delete" asp-route-id="@item.IdInquilino" title="Eliminar">Eliminar</a>
+                <a asp-action="Details" asp-route-id="@item.IdInquilino" title="Detalle"><i class="fas fa-asterisk"></i></a>&nbsp;
+                <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+                <a asp-action="Delete" asp-route-id="@item.IdInquilino" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
                
 
 

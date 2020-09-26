@@ -2,7 +2,7 @@
 
 @{ ViewData["Title"] = "Eliminar"; }
 
-<h1>Eliminar</h1>
+<h2>Eliminar Contrato</h2>
 
 <h3>¿Seguro que desea eliminar el contrato?</h3>
 <div>
@@ -46,7 +46,7 @@
     </dl>
 
     <form asp-action="Delete">
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index">Volver al listado</a>
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> 
+        <a asp-action="Index"  class="btn btn-secondary">Volver</a>
     </form>
 </div>
