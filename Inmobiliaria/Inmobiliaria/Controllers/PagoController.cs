@@ -39,6 +39,7 @@ namespace Inmobiliaria.Controllers
         [Authorize]
         public ActionResult PorContrato(int id)
         {
+            TempData["ContId"] = id;
             TempData["IdPago"] = id;
             var lista = repositorio.BuscarPorContrato(id);
             if (TempData.ContainsKey("Id"))
@@ -59,6 +60,10 @@ namespace Inmobiliaria.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            int id= (int)TempData["IdPago"];
+            ViewBag.ContId = id;
+            TempData["ContId"] = id;
+
             return View();
         }
 
@@ -69,12 +74,9 @@ namespace Inmobiliaria.Controllers
         public ActionResult Create(Pago entidad)
         {
             int id = 0;
-            ViewBag.IdPago = TempData["IdPago"];
-            if (ViewBag.IdPago != null) 
-            {
-                id = ViewBag.IdPago;
-            }
-                
+
+            id = (int)TempData["ContId"];
+
 
             try
             {
@@ -101,24 +103,38 @@ namespace Inmobiliaria.Controllers
 
         // GET: Pago/Edit/5
         [Authorize]
-        public ActionResult Edit()
+        public ActionResult Edit(int id)
         {
-            return View();
+            
+            var entidad = repositorio.ObtenerPorId(id);
+            TempData["IdCont"] = entidad.ContratoId;
+
+
+            if (TempData.ContainsKey("Mensaje"))
+                ViewBag.Mensaje = TempData["Mensaje"];
+            if (TempData.ContainsKey("Error"))
+                ViewBag.Error = TempData["Error"];
+            return View(entidad);
         }
 
         // POST: Pago/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Pago entidad)
         {
             try
-            {
-                return RedirectToAction(nameof(Index));
+            {   int idC=(int)TempData["IdCont"];
+                entidad.ContratoId = idC;
+                repositorio.Modificacion(entidad);
+                TempData["Mensaje"] = "Datos guardados correctamente";
+                return RedirectToAction("PorContrato", new { id = idC });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrate = ex.StackTrace;
+                return View(entidad);
             }
         }
 

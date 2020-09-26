@@ -65,13 +65,13 @@ namespace Inmobiliaria.Models
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				string sql = "UPDATE Pago SET " +
-					"FechaPago=@fechaPago, Importe=@importe,ContratoId=@contratoId " +
+					"FechaPago=@fechaPago, Importe=@importe " +
 					"WHERE Id = @id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.Parameters.AddWithValue("@fechaPago", entidad.FechaPago);
 					command.Parameters.AddWithValue("@importe", entidad.Importe);
-					command.Parameters.AddWithValue("@contratoId", entidad.ContratoId);
+					command.Parameters.AddWithValue("@id", entidad.IdPago);
 					command.CommandType = CommandType.Text;
 					connection.Open();
 					res = command.ExecuteNonQuery();

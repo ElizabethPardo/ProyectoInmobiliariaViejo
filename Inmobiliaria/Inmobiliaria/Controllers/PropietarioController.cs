@@ -30,6 +30,8 @@ namespace Inmobiliaria.Controllers
         {
             var lista = repositorio.ObtenerTodos();
             ViewBag.Id = TempData["Id"];
+            if (TempData.ContainsKey("Id"))
+                ViewBag.Id = TempData["Id"];
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
             return View(lista);
