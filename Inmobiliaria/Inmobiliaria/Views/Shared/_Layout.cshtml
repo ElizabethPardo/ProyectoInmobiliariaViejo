@@ -3,83 +3,85 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Inmobiliaria</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+
+    <link rel="stylesheet" href="~/lib/jquery/dist/jquery.js" />
+    <link rel="stylesheet" href="~/js/bootstrap.js" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
+    <title>@ViewData["Title"] - Inmobiliaria</title>
+    @RenderSection("Styles", false)
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-inverse">
+        <nav class="navbar navbar-expand-lg  navbar navbar-dark bg-dark">
 
-            <div class="container d-flex flex-column flex-md-row justify-content-between">
 
-                @if (!User.Identity.IsAuthenticated)
-                {<div class="navbar-header" style="margin-bottom:25px;">
-                        <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                <img src="/img/logo.jpg"width="183" height="56"  data-toggle="collapse" data-target="#navbarNav" alt="" loading="lazy" style="position:relative; bottom:8px; margin-right:800px;"></a>
-                    </div>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a class="nav-link" href="@Url.Link("login", null)">Iniciar Sesión  <span class="glyphicon glyphicon-share"> </span></a></li>
-                        </ul>
-                        }
-                        else
-                        {
-                        <div class="navbar-header" style="margin-bottom:25px;">
-                            <a class=" navbar-brand" asp-controller="Home" asp-action="Index" id="homeMenu" aria-expanded="false" data-display="static">
-                             <img src="/img/logo.jpg" width="183" height="56" data-toggle="collapse" data-target="#navbarNav" alt="" loading="lazy" style="position: relative; bottom: 10px; margin-right: 300px;">
-                         
-                            </a>
+
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <img src="/img/logo.png" width="180" height="53" data-toggle="collapse" data-target="#navbarNav" alt="" loading="lazy" style="position:relative; bottom:1px; margin-right:800px;">
+                </a>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Link("login", null)">Iniciar Sesión  <span class="glyphicon glyphicon-share"> </span></a>
+                    </li>
+                </ul>
+
+            }
+            else
+            { <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class=" navbar-brand" asp-controller="Home" asp-action="Index" id="homeMenu" aria-expanded="false" data-display="static">
+                            <img src="/img/logo.png" width="180" height="53" data-toggle="collapse" data-target="#navbarNav" alt="" loading="lazy" style="position: relative; bottom: 1px; margin-right: 300px;">
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <li class="nav-item" style="padding:10px;">
+                            <a class="nav-link" asp-controller="Usuario" asp-action="Index"><span class="lnr lnr-star"></span> Usuarios</a>
+                        </li>
+                    }
+                    <li class="nav-item" style="padding:10px;">
+                        <a class="nav-link " asp-controller="Propietario" asp-action="Index"><span class="lnr lnr-user"></span> Propietarios</a>
+                    </li>
+                    <li class="nav-item" style="padding:10px;">
+                        <a class="nav-link" asp-controller="Inquilino" asp-action="Index"><span class="lnr lnr-user"></span> Inquilinos</a>
+                    </li>
+                    <li class="nav-item" style="padding:10px;">
+                        <a class="nav-link" asp-controller="Inmueble" asp-action="Index"><span class="lnr lnr-apartment"></span> Inmuebles</a>
+                    </li>
+                    <li class="nav-item" style="padding:10px;">
+                        <a class="nav-link" asp-controller="Contrato" asp-action="Index"><span class="lnr lnr-enter"></span> Alquileres</a>
+                    </li>
+                    <li class="nav-item dropdown" style="padding:10px;">
+
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @User.Identity.Name <i class="fas fa-user"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a asp-controller="Usuario" asp-action="Perfil" class="dropdown-item"> Perfil <i class="fas fa-user"></i></a>
+                            <a asp-controller="Usuario" asp-action="Logout" class="dropdown-item"> Salir <i class="fas fa-sign-out-alt"></i></a>
                         </div>
+                    </li>
+                </ul>
 
-                        <ul class="nav navbar-nav" style="display:inline">
+            }
 
-                            @if (User.IsInRole("Administrador"))
-                            {
-                                <li class="nav-item" style="padding:10px;">
-                                    <a class="nav-link" asp-controller="Usuario" asp-action="Index"><span class="lnr lnr-star"></span> Usuarios</a>
-                                </li>
-                            }
-                            <li class="nav-item" style="padding:10px;">
-                                <a class="nav-link " asp-controller="Propietario" asp-action="Index"><span class="lnr lnr-user"></span> Propietarios</a>
-                            </li>
-                            <li class="nav-item" style="padding:10px;">
-                                <a class="nav-link" asp-controller="Inquilino" asp-action="Index"><span class="lnr lnr-user"></span> Inquilinos</a>
-                            </li>
-                            <li class="nav-item" style="padding:10px;">
-                                <a class="nav-link" asp-controller="Inmueble" asp-action="Index"><span class="lnr lnr-apartment"></span> Inmuebles</a>
-                            </li>
-                            <li class="nav-item" style="padding:10px;">
-                                <a class="nav-link" asp-controller="Contrato" asp-action="Index"><span class="lnr lnr-enter"></span> Alquileres</a>
-                            </li>
-                            <li class="dropdown" style="padding:10px;">
 
-                                <a class=" dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown">
-                                    <span class="lnr lnr-user"></span> @User.Identity.Name
-                                </a>
-
-                                <ul class="dropdown-menu">
-                                    <li> <a asp-controller="Usuario" asp-action="Perfil"><i class="lnr lnr-user"></i> Perfil</a></li>
-                                    <li><a asp-controller="Usuario" asp-action="Logout"><i class="lnr lnr-exit"></i> Salir</a></li>
-                                </ul>
-
-                            </li>
-                        </ul>
-
-                        }
-                </div>
-
-</nav>
+        </nav>
     </header>
     <div class="container">
         <main role="main" class="container">
             <div class="">
+                <br>
                 @if (ViewBag.Id != null)
                 {//alta exitosa
                     <div class="alert alert-success alert-dismissible fade show" role="alert">

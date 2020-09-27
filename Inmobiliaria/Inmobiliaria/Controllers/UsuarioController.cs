@@ -34,6 +34,7 @@ namespace Inmobiliaria.Controllers
         public ActionResult Index()
         {
             var usuarios = repositorio.ObtenerTodos();
+            ViewBag.Id = TempData["Id"];
             if (TempData.ContainsKey("Id"))
                 ViewBag.Id = TempData["Id"];
             if (TempData.ContainsKey("Mensaje"))
@@ -77,7 +78,7 @@ namespace Inmobiliaria.Controllers
                 u.Rol = User.IsInRole("Administrador") ? u.Rol : (int)enRoles.Empleado;
                 var nbreRnd = Guid.NewGuid();//posible nombre aleatorio
                 int res = repositorio.Alta(u);
-           
+                TempData["Id"] = u.Id;
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
