@@ -8,7 +8,7 @@
     <a asp-action="Create" class="btn btn-dark">Crear Nuevo<i class="fas fa-plus"> </i></a>
 </p>
 <table class="table">
-    <thead>
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Id)
@@ -22,7 +22,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-           
+
             <th>
                 @Html.DisplayNameFor(model => model.Rol)
             </th>
@@ -45,7 +45,7 @@
     <td>
         @Html.DisplayFor(modelItem => item.Email)
     </td>
-   
+
     <td>
         @Html.DisplayFor(modelItem => item.RolNombre)
     </td>
@@ -53,6 +53,7 @@
         <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
         <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
     </td>
-</tr>}
+</tr>
+}
     </tbody>
 </table>

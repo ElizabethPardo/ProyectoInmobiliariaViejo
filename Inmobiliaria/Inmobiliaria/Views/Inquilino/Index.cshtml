@@ -13,7 +13,7 @@
 </p>
 
 <table class="table">
-    <thead>
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.IdInquilino)
@@ -44,38 +44,38 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdInquilino)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Apellido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Dni)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Direccion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-          
-            <td>
-                <a asp-action="Details" asp-route-id="@item.IdInquilino" title="Detalle"><i class="fas fa-asterisk"></i></a>&nbsp;
-                <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
-                <a asp-action="Delete" asp-route-id="@item.IdInquilino" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
-               
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdInquilino)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dni)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefono)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Direccion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.IdInquilino" title="Detalle"><i class="fas fa-asterisk"></i></a>&nbsp;
+                    <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+                    <a asp-action="Delete" asp-route-id="@item.IdInquilino" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
 
 
-            </td>
-        </tr>
+
+                </td>
+            </tr>
         }
     </tbody>
 </table>

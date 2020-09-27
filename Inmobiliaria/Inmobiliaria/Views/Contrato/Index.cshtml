@@ -17,7 +17,7 @@ CONTRATOS DE ALQUILER
 </p>
 
 <table class="table">
-    <thead>
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.IdContrato)
@@ -34,38 +34,38 @@ CONTRATOS DE ALQUILER
             <th>
                 @Html.DisplayNameFor(model => model.Inmueble.Direccion)
             </th>
-           
+
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdContrato)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaDesde)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaHasta)
-            </td>
-            <td>
-                @(item.Inquilino.Nombre + " " + item.Inquilino.Apellido)
-            </td>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdContrato)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaDesde)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaHasta)
+                </td>
+                <td>
+                    @(item.Inquilino.Nombre + " " + item.Inquilino.Apellido)
+                </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.Inmueble.Direccion)
-            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Inmueble.Direccion)
+                </td>
 
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdContrato" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
-                <a asp-action="Delete" asp-route-id="@item.IdContrato" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
-                <a asp-action="PorContrato" asp-controller="Pago" asp-route-id="@item.IdContrato" title="Pago"><i class="fas fa-money-check-alt"></i></a>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdContrato" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+                    <a asp-action="Delete" asp-route-id="@item.IdContrato" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+                    <a asp-action="PorContrato" asp-controller="Pago" asp-route-id="@item.IdContrato" title="Pago"><i class="fas fa-money-check-alt"></i></a>
 
-            </td>
-        </tr>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

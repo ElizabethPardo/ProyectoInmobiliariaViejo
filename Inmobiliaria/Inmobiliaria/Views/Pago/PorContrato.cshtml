@@ -8,7 +8,7 @@
     <a asp-action="Create" class="btn btn-dark">Crear Nuevo <i class="fas fa-plus"> </i></a>
 </p>
 <table class="table">
-    <thead>
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.IdPago)
@@ -39,7 +39,6 @@
         <a asp-action="Edit" asp-route-id="@item.IdPago" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
         <a asp-action="Delete" asp-route-id="@item.IdPago" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
     </td>
-</tr>
-}
+</tr>}
     </tbody>
 </table>
