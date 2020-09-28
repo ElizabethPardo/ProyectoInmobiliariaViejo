@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -10,31 +11,84 @@ namespace Inmobiliaria.Models
 {
     public class RepositorioContrato : RepositorioBase, IRepositorioContrato
 	{
-
-        public RepositorioContrato(IConfiguration configuration) : base(configuration)
+	
+		public RepositorioContrato(IConfiguration configuration) : base(configuration)
         {
 
         }
+		public int ValidarDisponibilidad(DateTime fechaDesde,DateTime fechaHasta) 
+		{
+			var FechaDesde = fechaDesde.ToShortDateString();
+			var FechaHasta= fechaHasta.ToShortDateString();
+		
+			IList<Inmueble> res = new List<Inmueble>();
+			int disponibilidad = 0;
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				string sql = $"SELECT* FROM inmueble WHERE id " +
+							 " IN(SELECT InmuebleId " +
+							" FROM Contrato WHERE FechaDesde <= @FechaHasta" +
+							" AND FechaHasta >= @FechaDesde); ";
 
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					command.Parameters.Add("@fechaDesde", SqlDbType.Date).Value = fechaDesde;
+					command.Parameters.Add("@fechaHasta", SqlDbType.Date).Value = fechaHasta;
+					command.CommandType = CommandType.Text;
+					connection.Open();
+					var reader = command.ExecuteReader();
+					while (reader.Read())
+					{
+						Inmueble entidad = new Inmueble
+						{
+							IdInmueble = reader.GetInt32(0),
+							Direccion = reader.GetString(1),
+							Ambientes = reader.GetInt32(2),
+							Uso = reader.GetInt32(3),
+							Tipo = reader.GetInt32(4),
+							Precio = reader.GetDecimal(5),
+							Estado = reader.GetBoolean(6),
+							PropietarioId = reader.GetInt32(7),
+						};
+						res.Add(entidad);
+					}
+					connection.Close();
+				}
+			}
+
+			if (res != null) { disponibilidad = -1; }
+
+			return disponibilidad;
+		}
 		public int Alta(Contrato entidad)
 		{
 			int res = -1;
-			using (SqlConnection connection = new SqlConnection(connectionString))
+
+			DateTime ingreso = entidad.FechaDesde;
+			DateTime salida = entidad.FechaHasta;
+
+			int disponibilidad=ValidarDisponibilidad(ingreso,salida);
+
+			if (disponibilidad == 0)
 			{
-				string sql = $"INSERT INTO Contrato (FechaDesde,FechaHasta,InquilinoId,InmuebleId) " +
-					"VALUES (@fechaDesde, @fechaHasta, @inquilinoId, @inmuebleId);" +
-					"SELECT SCOPE_IDENTITY();";//devuelve el id insertado (LAST_INSERT_ID para mysql)
-				using (var command = new SqlCommand(sql, connection))
+
+				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
-					command.CommandType = CommandType.Text;
-					command.Parameters.AddWithValue("@fechaDesde", entidad.FechaDesde);
-					command.Parameters.AddWithValue("@fechaHasta", entidad.FechaHasta);
-					command.Parameters.AddWithValue("@inquilinoId", entidad.InquilinoId);
-					command.Parameters.AddWithValue("@inmuebleId", entidad.InmuebleId);
-					connection.Open();
-					res = Convert.ToInt32(command.ExecuteScalar());
-					entidad.IdContrato = res;
-					connection.Close();
+					string sql = $"INSERT INTO Contrato (FechaDesde,FechaHasta,InquilinoId,InmuebleId) " +
+						"VALUES (@fechaDesde, @fechaHasta, @inquilinoId, @inmuebleId);" +
+						"SELECT SCOPE_IDENTITY();";//devuelve el id insertado (LAST_INSERT_ID para mysql)
+					using (var command = new SqlCommand(sql, connection))
+					{
+						command.CommandType = CommandType.Text;
+						command.Parameters.AddWithValue("@fechaDesde", entidad.FechaDesde);
+						command.Parameters.AddWithValue("@fechaHasta", entidad.FechaHasta);
+						command.Parameters.AddWithValue("@inquilinoId", entidad.InquilinoId);
+						command.Parameters.AddWithValue("@inmuebleId", entidad.InmuebleId);
+						connection.Open();
+						res = Convert.ToInt32(command.ExecuteScalar());
+						entidad.IdContrato = res;
+						connection.Close();
+					}
 				}
 			}
 			return res;

@@ -65,10 +65,20 @@ namespace Inmobiliaria.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    repositorio.Alta(entidad);
-                    TempData["Id"] = entidad.IdContrato;
-                    return RedirectToAction("Index", "Pago", new { id = entidad.IdContrato });
+                    int res= repositorio.Alta(entidad);
 
+                    if (res == -1)
+                    {
+                        TempData["Mensaje"] = "El inmueble se encuentra ocupado en las fechas seleccionadas";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else 
+                    {
+                     
+                        TempData["Id"] = entidad.IdContrato;
+                        return RedirectToAction("Index", "Pago", new { id = entidad.IdContrato });
+                    }
+                
                 }
                 else
                 {
