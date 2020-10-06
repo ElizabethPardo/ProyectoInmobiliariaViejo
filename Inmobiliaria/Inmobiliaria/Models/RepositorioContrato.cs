@@ -26,8 +26,8 @@ namespace Inmobiliaria.Models
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				string sql = $"SELECT InmuebleId " +
-							" FROM Contrato WHERE FechaDesde <= @FechaHasta" +
-							" AND FechaHasta >= @FechaDesde AND InmuebleId=@inmuebleId ";
+							" FROM Contrato WHERE (@fechaDesde >= FechaDesde or @fechaHasta >=  FechaDesde)" +
+                                 " and(@fechaDesde <= FechaHasta or @fechaHasta <= FechaHasta) ";
 
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{

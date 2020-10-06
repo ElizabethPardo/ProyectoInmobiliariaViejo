@@ -43,7 +43,10 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdPago" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
-                <a asp-action="Delete" asp-route-id="@item.IdPago" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+                @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
+                {
+                    <a asp-action="Delete" asp-route-id="@item.IdPago" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+                }
             </td>
         </tr>}
     </tbody>

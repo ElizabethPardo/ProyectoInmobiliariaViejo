@@ -313,7 +313,8 @@ namespace Inmobiliaria.Models
 				string sql = "SELECT i.Id, i.Direccion, Ambientes, Uso, Tipo, Precio, Estado, PropietarioId, p.Nombre, p.Apellido" +
 					" FROM Inmueble i INNER JOIN Propietario p ON i.PropietarioId = p.Id " +
 					"WHERE i.id NOT IN(SELECT InmuebleId " +
-					"FROM Contrato WHERE FechaDesde <= @fin AND FechaHasta >= @inicio ); ";
+					"FROM Contrato WHERE (@inicio >= FechaDesde or @fin >=  FechaDesde)" +
+								 " and(@inicio <= FechaHasta or @fin <= FechaHasta) ); ";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.Parameters.Add("@inicio", SqlDbType.Date).Value = inicio;

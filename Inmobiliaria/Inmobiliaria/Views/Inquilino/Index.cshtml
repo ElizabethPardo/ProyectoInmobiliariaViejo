@@ -69,9 +69,12 @@
 
                 <td>
                     <a asp-action="Details" asp-route-id="@item.IdInquilino" title="Detalle"><i class="fas fa-asterisk"></i></a>&nbsp;
-                    <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
-                    <a asp-action="Delete" asp-route-id="@item.IdInquilino" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
-
+                    @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.IdInquilino" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+                        
+                    }
+                    &nbsp;<a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar"><i class="fas fa-edit"></i></a>
 
 
                 </td>

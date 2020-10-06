@@ -77,6 +77,7 @@ namespace Inmobiliaria.Controllers
         public ActionResult Create()
         {
             ViewBag.IdPro = TempData["IdPro"];
+            TempData["Pro"] = TempData["IdPro"];
             ViewBag.Usos = Inmueble.ObtenerUsos();
             ViewBag.Tipos = Inmueble.ObtenerTipos();
 
@@ -90,7 +91,7 @@ namespace Inmobiliaria.Controllers
         public ActionResult Create(Inmueble entidad)
         {
 
-            ViewBag.IdPro = TempData["IdPro"];
+            ViewBag.IdPro= TempData["Pro"];
             int id = ViewBag.IdPro;
 
             try

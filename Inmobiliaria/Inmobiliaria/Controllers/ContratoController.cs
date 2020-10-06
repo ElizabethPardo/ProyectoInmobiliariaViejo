@@ -29,7 +29,8 @@ namespace Inmobiliaria.Controllers
         {
 
             var lista = repositorio.ObtenerTodos();
-
+            if (TempData.ContainsKey("Error"))
+                ViewBag.Error = TempData["Error"];
             if (TempData.ContainsKey("Id"))
                 ViewBag.Id = TempData["Id"];
             if (TempData.ContainsKey("Mensaje"))

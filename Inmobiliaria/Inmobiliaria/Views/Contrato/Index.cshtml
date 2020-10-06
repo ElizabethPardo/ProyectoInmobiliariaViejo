@@ -13,11 +13,11 @@
         <form class="form-inline" asp-action="BuscarInmueblesPorFecha" asp-controller="Inmueble">
             <div class="input-group mb-2 mr-sm-2">
                 <label for="FechaInicio" class="control-label"></label>
-                <input name="FechaInicio" type="date" class="form-control" />
+                <input name="FechaInicio" type="date" class="form-control" required />
             </div>
             <div class="input-group mb-2 mr-sm-2">
                 <label for="FechaFin" class="control-label"></label>
-                <input name="FechaFin" type="date" class="form-control" />
+                <input name="FechaFin" type="date" class="form-control" required />
             </div>
             <button type="submit" class="btn btn-dark" style="margin-bottom: 9px;">Inmuebles disponibles</button>
         </form>
@@ -74,8 +74,11 @@
 
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.IdContrato" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
-                    <a asp-action="Delete" asp-route-id="@item.IdContrato" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
-                    <a asp-action="PorContrato" asp-controller="Pago" asp-route-id="@item.IdContrato" title="Pago"><i class="fas fa-money-check-alt"></i></a>
+                    @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.IdContrato" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+                    }
+                    &nbsp;<a asp-action="PorContrato" asp-controller="Pago" asp-route-id="@item.IdContrato" title="Pago"><i class="fas fa-money-check-alt"></i></a>
 
                 </td>
             </tr>
