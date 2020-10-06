@@ -10,24 +10,37 @@
     CONTRATOS DE ALQUILER
 </h2>
 
-        <form class="form-inline" asp-action="BuscarInmueblesPorFecha" asp-controller="Inmueble">
-            <div class="input-group mb-2 mr-sm-2">
-                <label for="FechaInicio" class="control-label"></label>
-                <input name="FechaInicio" type="date" class="form-control" />
+<table>
+    <tr>
+        <th>
+            <div class="form-group">
+                <label name="FechaIngreso" class="control-label"></label>
+                <input type="date" name="FechaIngreso" class="form-control" />
+                <span name="FechaIngreso" class="text-danger"></span>
             </div>
-            <div class="input-group mb-2 mr-sm-2">
-                <label for="FechaFin" class="control-label"></label>
-                <input name="FechaFin" type="date" class="form-control" />
+        </th>
+        <th>
+            <div class="form-group">
+                <label name="FechaSalida" class="control-label"></label>
+                <input type="date" name="FechaSalida" class="form-control" />
+                <span name="FechaSalida" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-dark" style="margin-bottom: 9px;">Inmuebles disponibles</button>
-        </form>
-   
 
-<br>
-    <a asp-action="Create" class="btn btn-dark" style="width:180px;">Crear nuevo <i class="fas fa-plus"> </i></a>
-     <a asp-action="BuscarVigentes" title="Vigentes" class="btn btn-dark" style="width:180px;">Contratos Vigentes</a>
+        </th>
+        <th>
+            <a asp-action="BuscarInmueblesPorFecha" title="Inmuebles disponibles" class="btn btn-dark" style="margin-top:7px;" >Inmuebles disponibles</a>
+        <th>
+    </tr>
+    <tr>
+        <th>
+            <a asp-action="Create" class="btn btn-dark" style="width:180px;">Crear nuevo<i class="fas fa-plus"></i></a>
+        </th>
+        <th>
+            <a asp-action="BuscarVigentes" title="Vigentes" class="btn btn-dark" style="width:180px;">Contratos Vigentes</a>
+        </th>
+    <tr>
+</table>
 
-<br>
 <br>
 <table class="table">
     <thead class="thead-dark">

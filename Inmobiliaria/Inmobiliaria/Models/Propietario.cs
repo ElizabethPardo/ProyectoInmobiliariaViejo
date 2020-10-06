@@ -17,10 +17,11 @@ namespace Inmobiliaria.Models
 		public string Apellido { get; set; }
 		[Required]
 		public string Dni { get; set; }
+		[Required]
 		public string Direccion { get; set; }
+		[Required]
 		public string Telefono { get; set; }
 		[Required, EmailAddress]
-		
 		public string Email { get; set; }
 	
 		

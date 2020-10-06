@@ -8,6 +8,9 @@ namespace Inmobiliaria.Models
 {
     public class CambioClaveView
     {
+
+        [Required(ErrorMessage = "Debe ingresar la contraseña actual ")]
+        [StringLength(50, ErrorMessage = "La clave debe tener entre 3 y 50 caracteres", MinimumLength = 3)]
         [DataType(DataType.Password)]
         public string ClaveVieja { get; set; }
 

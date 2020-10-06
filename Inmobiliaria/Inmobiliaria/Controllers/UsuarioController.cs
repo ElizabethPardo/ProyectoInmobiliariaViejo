@@ -22,12 +22,16 @@ namespace Inmobiliaria.Controllers
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment environment;
         private readonly IRepositorioUsuario repositorio;
+        private readonly IRepositorioInquilino repoInquilino;
+        private readonly IRepositorioPropietario repoPropietario;
 
-        public UsuarioController(IConfiguration configuration, IWebHostEnvironment environment, IRepositorioUsuario repositorio)
+        public UsuarioController(IConfiguration configuration, IWebHostEnvironment environment, IRepositorioUsuario repositorio, IRepositorioInquilino repoInquilino, IRepositorioPropietario repoPropietario)
         {
             this.configuration = configuration;
             this.environment = environment;
             this.repositorio = repositorio;
+            this.repoInquilino= repoInquilino;
+            this.repoPropietario = repoPropietario;
         }
         // GET: Usuario
         [Authorize(Policy = "Administrador")]
@@ -64,26 +68,60 @@ namespace Inmobiliaria.Controllers
         [Authorize(Policy = "Administrador")]
         public ActionResult Create(Usuario u)
         {
-            if (!ModelState.IsValid)
-                return View();
+           
             try
             {
-                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                        password: u.Clave,
-                        salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
-                        prf: KeyDerivationPrf.HMACSHA1,
-                        iterationCount: 1000,
-                        numBytesRequested: 256 / 8));
-                u.Clave = hashed;
-                u.Rol = User.IsInRole("Administrador") ? u.Rol : (int)enRoles.Empleado;
-                var nbreRnd = Guid.NewGuid();//posible nombre aleatorio
-                int res = repositorio.Alta(u);
-                TempData["Id"] = u.Id;
-                return RedirectToAction(nameof(Index));
+               
+
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.Roles = Usuario.ObtenerRoles();
+                    if(u.Id == 0)
+                       TempData["Mensaje"] = "Debe ingresar todo los datos del usuario!";
+                       ViewBag.Error= TempData["Mensaje"];
+                    return View();
+                }
+                {
+                    var user = repositorio.ObtenerPorEmail(u.Email);
+                    var inqui = repoInquilino.ObtenerPorEmail(u.Email);
+                    var prop = repoPropietario.ObtenerPorEmail(u.Email);
+
+                    if (user == null && inqui == null && prop == null)
+                    {
+
+                        string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                                password: u.Clave,
+                                salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
+                                prf: KeyDerivationPrf.HMACSHA1,
+                                iterationCount: 1000,
+                                numBytesRequested: 256 / 8));
+                        u.Clave = hashed;
+                        u.Rol = User.IsInRole("Administrador") ? u.Rol : (int)enRoles.Empleado;
+                        var nbreRnd = Guid.NewGuid();//posible nombre aleatorio
+                        int res = repositorio.Alta(u);
+                        TempData["Id"] = u.Id;
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        TempData["Mensaje"] = "El Email ingresado ya se encuentra registrado en el sistema! ";
+                        ViewBag.Error = TempData["Mensaje"];
+                        ViewBag.Roles = Usuario.ObtenerRoles();
+                        return View();
+                    }
+
+                       
+
+                }
+                
+                
             }
             catch (Exception ex)
             {
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrate = ex.StackTrace;
                 ViewBag.Roles = Usuario.ObtenerRoles();
+               
                 return View();
             }
         }
@@ -108,6 +146,10 @@ namespace Inmobiliaria.Controllers
             ViewData["Title"] = "Editar usuario";
             var u = repositorio.ObtenerPorId(id);
             ViewBag.Roles = Usuario.ObtenerRoles();
+            if (TempData.ContainsKey("Mensaje"))
+                ViewBag.Mensaje = TempData["Mensaje"];
+            if (TempData.ContainsKey("Error"))
+                ViewBag.Error = TempData["Error"];
             return View(u);
         }
 
@@ -130,7 +172,10 @@ namespace Inmobiliaria.Controllers
                     {
                         u.Rol = usuarioActual.Rol;
                         repositorio.Modificacion(u);
-                        TempData["Mensaje"] = "Datos guardados correctamente";
+                        TempData["Mensaje"] = "Datos guardados correctamente"; 
+                        if (TempData.ContainsKey("Mensaje"))
+                            ViewBag.Mensaje = TempData["Mensaje"];
+
                         return RedirectToAction("Perfil", new { id = id });
                     }
                 }
@@ -138,16 +183,13 @@ namespace Inmobiliaria.Controllers
                 {
                     repositorio.Modificacion(u);
                     TempData["Mensaje"] = "Datos guardados correctamente";
+
                 }
-                
-             
-                    return RedirectToAction(nameof(Index));
-                
-              
 
+                if (TempData.ContainsKey("Mensaje"))
+                    ViewBag.Mensaje = TempData["Mensaje"];
 
-                // TODO: Add update logic here
-
+                return RedirectToAction(nameof(Index));
 
             }
             catch(Exception ex)
@@ -278,46 +320,52 @@ namespace Inmobiliaria.Controllers
                         prf: KeyDerivationPrf.HMACSHA1,
                         iterationCount: 1000,
                         numBytesRequested: 256 / 8));
-                if (usuario.Clave != pass)
-                {
-                    TempData["Error"] = "Clave incorrecta";
-                    //se rederige porque no hay vista de cambio de pass, está compartida con Edit
-                    if (usuario.Rol == 1)
-                        return RedirectToAction("Edit", new { id = id });
-                    else
-                        return RedirectToAction("Perfil", new { id = id });
-                }
-                if (ModelState.IsValid)
-                {
-                    usuario.Clave = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                        password: cambio.ClaveNueva,
-                        salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
-                        prf: KeyDerivationPrf.HMACSHA1,
-                        iterationCount: 1000,
-                        numBytesRequested: 256 / 8));
-                    repositorio.ModificarPass(usuario);
-                    TempData["Mensaje"] = "Contraseña actualizada correctamente";
-                    if(usuario.Rol== 1)
-                    return RedirectToAction(nameof(Index));
-                    else
-                        return RedirectToAction("Perfil", new { id = id });
-                }
-                else
-                {
-                    foreach (ModelStateEntry modelState in ViewData.ModelState.Values)
+
+                  
+                    if (ModelState.IsValid)
                     {
-                        foreach (ModelError error in modelState.Errors)
-                        {
-                            TempData["Error"] += error.ErrorMessage + "\n";
-                        }
-                    }
+                       if (usuario.Clave != pass)
+                      {
+                        TempData["Error"] = "Clave actual incorrecta";
+                        //se rederige porque no hay vista de cambio de pass, está compartida con Edit
+                        if (usuario.Rol == 1)
+                            return RedirectToAction("Perfil", new { id = id });
+                        else
+                           return RedirectToAction("Edit", new { id = id });
+                       }
 
-                    if(usuario.Rol== 1)
-                    return RedirectToAction("Edit", new { id = id });
+                       usuario.Clave = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                            password: cambio.ClaveNueva,
+                            salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
+                            prf: KeyDerivationPrf.HMACSHA1,
+                            iterationCount: 1000,
+                            numBytesRequested: 256 / 8));
+                        repositorio.ModificarPass(usuario);
+                        TempData["Mensaje"] = "Contraseña actualizada correctamente";
+                        if (usuario.Rol == 1)
+                            return RedirectToAction(nameof(Index));
+                        else
+                            return RedirectToAction("Perfil", new { id = id });
+                    }
                     else
+                    {
+                        foreach (ModelStateEntry modelState in ViewData.ModelState.Values)
+                        {
+                            foreach (ModelError error in modelState.Errors)
+                            {
+                                TempData["Error"] += error.ErrorMessage + "\n";
+                            }
+                        }
+                        
+
+                        if (usuario.Rol == 1)
                         return RedirectToAction("Perfil", new { id = id });
+                        else
+                         return RedirectToAction("Edit", new { id = id });
 
                 }
+                
+          
             }
             catch (Exception ex)
             {

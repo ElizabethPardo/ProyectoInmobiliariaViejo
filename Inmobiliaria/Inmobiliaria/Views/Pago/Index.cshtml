@@ -14,6 +14,9 @@
                 @Html.DisplayNameFor(model => model.IdPago)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.NroPago)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.FechaPago)
             </th>
             <th>
@@ -25,21 +28,25 @@
     <tbody>
         @foreach (var item in Model)
         {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.IdPago)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.FechaPago)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Importe)
-    </td>
-    <td>
-        <a asp-action="Edit" asp-route-id="@item.IdPago" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
-        <a asp-action="Delete" asp-route-id="@item.IdPago" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
-    </td>
-</tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdPago)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NroPago)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaPago)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Importe)
+            </td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdPago" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+                <a asp-action="Delete" asp-route-id="@item.IdPago" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+            </td>
+        </tr>
 }
     </tbody>
 </table>

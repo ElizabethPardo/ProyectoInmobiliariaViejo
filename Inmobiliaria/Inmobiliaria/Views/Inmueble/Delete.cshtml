@@ -55,13 +55,21 @@
             @Html.DisplayNameFor(model => model.PropietarioId)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PropietarioId)
+        @(Model.Duenio.Nombre + " " + Model.Duenio.Apellido)
         </dd>
     </dl>
 
     <form asp-action="Delete">
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> 
-        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+
+        @if (ViewBag.Pro == null)
+        {
+            <a asp-action="Index" class="btn btn-secondary">Volver</a> 
+        }
+        else
+        {
+          <a asp-action="PorPropietario" asp-controller="Inmueble" asp-route-id="@Model.PropietarioId" class="btn btn-secondary">Volver</a>
+        }
     </form>
 </div>
 

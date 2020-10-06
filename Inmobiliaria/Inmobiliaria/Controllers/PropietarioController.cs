@@ -16,13 +16,19 @@ namespace Inmobiliaria.Controllers
     {
         
 
+        private readonly IRepositorioUsuario repoUsuario;
+        private readonly IRepositorioInquilino repoInquilino;
+        private readonly IRepositorioInmueble repoInmueble;
         private readonly IRepositorioPropietario repositorio;
         private readonly IConfiguration config;
 
-        public PropietarioController(IRepositorioPropietario repositorio, IConfiguration config)
+        public PropietarioController(IRepositorioPropietario repositorio, IConfiguration config, IRepositorioUsuario repoUsuario, IRepositorioInquilino repoInquilino, IRepositorioInmueble repoInmueble)
         {
             this.repositorio = repositorio;
             this.config = config;
+            this.repoUsuario = repoUsuario;
+            this.repoInquilino = repoInquilino;
+            this.repoInmueble = repoInmueble;
         }
 
         [Authorize]
@@ -34,6 +40,8 @@ namespace Inmobiliaria.Controllers
                 ViewBag.Id = TempData["Id"];
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
+            if (TempData.ContainsKey("Error"))
+                ViewBag.Error = TempData["Error"];
             return View(lista);
         }
 
@@ -61,19 +69,28 @@ namespace Inmobiliaria.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    /*propietario.Clave = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                        password: propietario.Clave,
-                        salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
-                        prf: KeyDerivationPrf.HMACSHA1,
-                        iterationCount: 1000,
-                        numBytesRequested: 256 / 8));*/
-                    repositorio.Alta(propietario);
-                    TempData["Id"] = propietario.IdPropietario;
-                    return RedirectToAction(nameof(Index));
+                    var prop = repositorio.ObtenerPorEmail(propietario.Email);
+                    var user = repoUsuario.ObtenerPorEmail(propietario.Email);
+                    var inqui = repoInquilino.ObtenerPorEmail(propietario.Email);
+
+                    if (user == null && inqui == null && prop == null)
+                    {
+
+                        repositorio.Alta(propietario);
+                        TempData["Id"] = propietario.IdPropietario;
+                        return RedirectToAction(nameof(Index));
+
+                    }
+                    else
+                    {
+                        TempData["Error"] = "El Email ingresado ya se encuentra registrado en el sistema! ";
+                        ViewBag.Error = TempData["Error"];
+                        return View();
+                    }
                 }
                 else
                     return View(propietario);
-            }
+                 }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
@@ -103,9 +120,22 @@ namespace Inmobiliaria.Controllers
         {
             try
             {
-                repositorio.Modificacion(p);
-                TempData["Mensaje"] = "Datos guardados correctamente";
-                return RedirectToAction(nameof(Index));
+                var prop = repositorio.ObtenerPorEmail(p.Email);
+                var user = repoUsuario.ObtenerPorEmail(p.Email);
+                var inqui = repoInquilino.ObtenerPorEmail(p.Email);
+
+                if (user == null && inqui == null && (prop == null || prop.Email == p.Email))
+                {
+                    repositorio.Modificacion(p);
+                    TempData["Mensaje"] = "Datos guardados correctamente";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData["Error"] = "El Email ingresado ya se encuentra registrado en el sistema! ";
+                    ViewBag.Error = TempData["Error"];
+                    return View(p);
+                }
             }
             catch (Exception ex)
             {
@@ -114,7 +144,7 @@ namespace Inmobiliaria.Controllers
                 return View(p);
             }
         }
-
+        
         // GET: PropietarioController/Delete/5
         [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
@@ -135,10 +165,21 @@ namespace Inmobiliaria.Controllers
         {
             try
             {
-                repositorio.Baja(id);
-                TempData["Mensaje"] = "Eliminación realizada correctamente";
-                return RedirectToAction(nameof(Index));
+                var inmuebles = repoInmueble.BuscarPorPropietario(id);
+                entidad = repositorio.ObtenerPorId(id);
+                if (inmuebles.Count() == 0)
+                {
+                    repositorio.Baja(id);
+                    TempData["Mensaje"] = "Eliminación realizada correctamente";
+                    return RedirectToAction(nameof(Index));
+                }
+                else 
+                {
+                    ViewBag.Error = "No se puede eliminar el propietario ya que posee inmuebles registrados";
+                    return View(entidad);
+                }
             }
+                
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;

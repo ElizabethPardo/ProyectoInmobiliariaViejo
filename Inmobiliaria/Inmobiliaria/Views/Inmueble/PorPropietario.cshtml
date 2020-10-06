@@ -2,11 +2,11 @@
 
 @{ ViewData["Title"] = "Index"; }
 
-<h1>INMUEBLES</h1>
+<h2>INMUEBLES</h2>
 
-<p>
-    <a asp-action="Create"  class="btn btn-dark">Crear nuevo<i class="fas fa-plus"> </i></a>
-</p>
+    <a asp-action="Create" class="btn btn-dark">Crear nuevo<i class="fas fa-plus"> </i></a>
+    <a asp-action="InmueblesDisponibles" title="Inmuebles disponibles" class="btn btn-dark">Inmuebles disponibles por estado</a>
+<br><br>
 <table class="table">
     <thead class="thead-dark">
         <tr>
@@ -67,7 +67,8 @@
     </td>
     <td>
         <a asp-action="Edit" asp-route-id="@item.IdInmueble" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
-        <a asp-action="Delete" asp-route-id="@item.IdInmueble" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+        <a asp-action="Delete" asp-route-id="@item.IdInmueble" title="Eliminar"><i class="fas fa-trash-alt"></i></a>&nbsp;
+        <a asp-action="PorInmueble" asp-controller="Contrato" asp-route-id="@item.IdInmueble" title="Contratos"><i class="fas fa-file-signature"></i></a>
     </td>
 </tr>}
     </tbody>

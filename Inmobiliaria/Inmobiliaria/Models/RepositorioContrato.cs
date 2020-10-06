@@ -16,39 +16,33 @@ namespace Inmobiliaria.Models
         {
 
         }
-		public int ValidarDisponibilidad(DateTime fechaDesde,DateTime fechaHasta) 
+		public int ValidarDisponibilidad(DateTime fechaDesde,DateTime fechaHasta, int inmuebleId) 
 		{
 			var FechaDesde = fechaDesde.ToShortDateString();
 			var FechaHasta= fechaHasta.ToShortDateString();
 		
-			IList<Inmueble> res = new List<Inmueble>();
+			IList<Contrato> res = new List<Contrato>();
 			int disponibilidad = 0;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"SELECT* FROM inmueble WHERE id " +
-							 " IN(SELECT InmuebleId " +
+				string sql = $"SELECT InmuebleId " +
 							" FROM Contrato WHERE FechaDesde <= @FechaHasta" +
-							" AND FechaHasta >= @FechaDesde); ";
+							" AND FechaHasta >= @FechaDesde AND InmuebleId=@inmuebleId ";
 
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.Parameters.Add("@fechaDesde", SqlDbType.Date).Value = fechaDesde;
 					command.Parameters.Add("@fechaHasta", SqlDbType.Date).Value = fechaHasta;
+					command.Parameters.Add("@inmuebleId", SqlDbType.Int).Value = inmuebleId;
 					command.CommandType = CommandType.Text;
 					connection.Open();
 					var reader = command.ExecuteReader();
 					while (reader.Read())
 					{
-						Inmueble entidad = new Inmueble
+						Contrato entidad = new Contrato
 						{
-							IdInmueble = reader.GetInt32(0),
-							Direccion = reader.GetString(1),
-							Ambientes = reader.GetInt32(2),
-							Uso = reader.GetInt32(3),
-							Tipo = reader.GetInt32(4),
-							Precio = reader.GetDecimal(5),
-							Estado = reader.GetBoolean(6),
-							PropietarioId = reader.GetInt32(7),
+							InmuebleId = reader.GetInt32(0),
+
 						};
 						res.Add(entidad);
 					}
@@ -56,7 +50,7 @@ namespace Inmobiliaria.Models
 				}
 			}
 
-			if (res != null) { disponibilidad = -1; }
+			if (res.Count() != 0) { disponibilidad = -1; }else { disponibilidad = 1; }
 
 			return disponibilidad;
 		}
@@ -67,9 +61,9 @@ namespace Inmobiliaria.Models
 			DateTime ingreso = entidad.FechaDesde;
 			DateTime salida = entidad.FechaHasta;
 
-			int disponibilidad=ValidarDisponibilidad(ingreso,salida);
+			int disponibilidad=ValidarDisponibilidad(ingreso,salida,entidad.InmuebleId);
 
-			if (disponibilidad == 0)
+			if (disponibilidad == 1)
 			{
 
 				using (SqlConnection connection = new SqlConnection(connectionString))
@@ -226,6 +220,57 @@ namespace Inmobiliaria.Models
 			}
 			return entidad;
 		}
+
+		public IList<Contrato> ContratosVigentes() 
+		{
+			IList<Contrato> res = new List<Contrato>();
+
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				string sql = "SELECT c.Id, c.FechaDesde, c.FechaHasta, c.InquilinoId, i.Nombre, i.Apellido, c.InmuebleId,e.direccion,e.propietarioId" +
+							  " FROM Contrato c INNER JOIN Inquilino i ON i.Id = c.InquilinoId" +
+							  " INNER JOIN Inmueble e ON  e.Id = c.InmuebleId"+
+							  " WHERE FechaDesde >= GETDATE() or FechaHasta >= GETDATE()";
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					command.CommandType = CommandType.Text;
+					connection.Open();
+					var reader = command.ExecuteReader();
+					while (reader.Read())
+					{
+						Contrato entidad = new Contrato
+						{
+							IdContrato = reader.GetInt32(0),
+							FechaDesde = reader.GetDateTime(1),
+							FechaHasta = reader.GetDateTime(2),
+
+							InquilinoId = reader.GetInt32(3),
+							Inquilino = new Inquilino
+							{
+								IdInquilino = reader.GetInt32(3),
+								Nombre = reader.GetString(4),
+								Apellido = reader.GetString(5),
+							},
+
+							InmuebleId = reader.GetInt32(6),
+							Inmueble = new Inmueble
+							{
+								IdInmueble = reader.GetInt32(6),
+								Direccion = reader.GetString(7),
+								PropietarioId = reader.GetInt32(8),
+							}
+						};
+
+						res.Add(entidad);
+					}
+					connection.Close();
+				}
+			}
+
+
+			return res;
+		}
+		
 
 
 	}

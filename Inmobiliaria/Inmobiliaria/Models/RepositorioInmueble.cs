@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Inmobiliaria.Models
 {
-    public class RepositorioInmueble : RepositorioBase, IRepositorioInmueble
+	public class RepositorioInmueble : RepositorioBase, IRepositorioInmueble
 	{
-        public RepositorioInmueble(IConfiguration configuration) : base(configuration)
-        {
+		public RepositorioInmueble(IConfiguration configuration) : base(configuration)
+		{
 
-        }
+		}
 
 		public int Alta(Inmueble entidad, int propietarioId)
 		{
@@ -186,10 +186,10 @@ namespace Inmobiliaria.Models
 							IdInmueble = reader.GetInt32(0),
 							Direccion = reader.GetString(1),
 							Ambientes = reader.GetInt32(2),
-							Uso= reader.GetInt32(3),
-							Tipo= reader.GetInt32(4),
-							Precio= reader.GetDecimal(5),
-							Estado= reader.GetBoolean(6),
+							Uso = reader.GetInt32(3),
+							Tipo = reader.GetInt32(4),
+							Precio = reader.GetDecimal(5),
+							Estado = reader.GetBoolean(6),
 
 							PropietarioId = reader.GetInt32(7),
 							Duenio = new Propietario
@@ -207,9 +207,149 @@ namespace Inmobiliaria.Models
 			return res;
 		}
 
-        public int Alta(Inmueble p)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public int Alta(Inmueble p)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<Inmueble> BuscarDisponibles()
+		{
+			IList<Inmueble> res = new List<Inmueble>();
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				string sql = "SELECT i.Id, i.Direccion, Ambientes, Uso, Tipo, Precio, Estado, PropietarioId," +
+					" p.Nombre, p.Apellido" +
+					" FROM Inmueble i INNER JOIN Propietario p ON i.PropietarioId = p.Id" +
+					" WHERE Estado = 'true'";
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					command.CommandType = CommandType.Text;
+					connection.Open();
+					var reader = command.ExecuteReader();
+					while (reader.Read())
+					{
+						Inmueble entidad = new Inmueble
+						{
+							IdInmueble = reader.GetInt32(0),
+							Direccion = reader.GetString(1),
+							Ambientes = reader.GetInt32(2),
+							Uso = reader.GetInt32(3),
+							Tipo = reader.GetInt32(4),
+							Precio = reader.GetDecimal(5),
+							Estado = reader.GetBoolean(6),
+							PropietarioId = reader.GetInt32(7),
+							Duenio = new Propietario
+							{
+								IdPropietario = reader.GetInt32(7),
+								Nombre = reader.GetString(8),
+								Apellido = reader.GetString(9),
+							}
+						};
+						res.Add(entidad);
+					}
+					connection.Close();
+				}
+			}
+			return res;
+		}
+
+		public IList<Contrato> BuscarPorContrato(int idInmueble)
+		{
+
+			IList<Contrato> res = new List<Contrato>();
+
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				string sql = $"SELECT c.Id, c.FechaDesde, c.FechaHasta, c.InquilinoId, i.Nombre, i.Apellido, c.InmuebleId,e.direccion,e.propietarioId " +
+					         $"FROM Contrato c INNER JOIN Inquilino i ON i.Id = c.InquilinoId" +
+							  " INNER JOIN Inmueble e ON  e.Id = c.InmuebleId" +
+							 $" WHERE InmuebleId IN(SELECT id FROM Inmueble WHERE Id =@idInmueble); ";
+
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					command.Parameters.Add("@idInmueble", SqlDbType.Int).Value = idInmueble;
+					command.CommandType = CommandType.Text;
+					connection.Open();
+					var reader = command.ExecuteReader();
+					while (reader.Read())
+					{
+						Contrato entidad = new Contrato
+						{
+							IdContrato = reader.GetInt32(0),
+							FechaDesde = reader.GetDateTime(1),
+							FechaHasta = reader.GetDateTime(2),
+
+							InquilinoId = reader.GetInt32(3),
+							Inquilino = new Inquilino
+							{
+								IdInquilino = reader.GetInt32(3),
+								Nombre = reader.GetString(4),
+								Apellido = reader.GetString(5),
+							},
+
+							InmuebleId = reader.GetInt32(6),
+							Inmueble = new Inmueble
+							{
+								IdInmueble = reader.GetInt32(6),
+								Direccion = reader.GetString(7),
+								PropietarioId = reader.GetInt32(8),
+							}
+						};
+						res.Add(entidad);
+					}
+					connection.Close();
+				}
+			}
+
+			return res;
+		}
+
+		public IList<Inmueble> BuscarInmueblesDisponibles(DateTime inicio, DateTime fin)
+		{
+			IList<Inmueble> res = new List<Inmueble>();
+
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				string sql = "SELECT i.Id, i.Direccion, Ambientes, Uso, Tipo, Precio, Estado, PropietarioId, p.Nombre, p.Apellido" +
+					" FROM Inmueble i INNER JOIN Propietario p ON i.PropietarioId = p.Id " +
+					"WHERE i.id NOT IN(SELECT InmuebleId " +
+					"FROM Contrato WHERE FechaDesde <= @fin AND FechaHasta >= @inicio ); ";
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					command.Parameters.Add("@inicio", SqlDbType.Date).Value = inicio;
+					command.Parameters.Add("@fin", SqlDbType.Date).Value = fin;
+					command.CommandType = CommandType.Text;
+					connection.Open();
+					var reader = command.ExecuteReader();
+					while (reader.Read())
+					{
+						Inmueble entidad = new Inmueble
+						{
+							IdInmueble = reader.GetInt32(0),
+							Direccion = reader.GetString(1),
+							Ambientes = reader.GetInt32(2),
+							Uso = reader.GetInt32(3),
+							Tipo = reader.GetInt32(4),
+							Precio = reader.GetDecimal(5),
+							Estado = reader.GetBoolean(6),
+							PropietarioId = reader.GetInt32(7),
+							Duenio = new Propietario
+							{
+								IdPropietario = reader.GetInt32(7),
+								Nombre = reader.GetString(8),
+								Apellido = reader.GetString(9),
+							}
+						};
+
+						res.Add(entidad);
+					}
+					connection.Close();
+				}
+			}
+
+
+			return res;
+
+		}
+	}
 }

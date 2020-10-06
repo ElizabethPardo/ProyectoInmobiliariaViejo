@@ -14,12 +14,16 @@ namespace Inmobiliaria.Controllers
     {
 
         private readonly IRepositorioInquilino repositorio;
+        private readonly IRepositorioUsuario repoUsuario;
+        private readonly IRepositorioPropietario repoPropietario;
         private readonly IConfiguration config;
 
-        public InquilinoController(IRepositorioInquilino repositorio,IConfiguration config)
+        public InquilinoController(IRepositorioInquilino repositorio,IConfiguration config, IRepositorioUsuario repoUsuario, IRepositorioPropietario repoPropietario)
         {
             this.repositorio = repositorio;
             this.config = config;
+            this.repoUsuario = repoUsuario;
+            this.repoPropietario = repoPropietario;
         }
 
         // GET: InquilinoController
@@ -61,9 +65,22 @@ namespace Inmobiliaria.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    repositorio.Alta(inquilino);
-                    TempData["Id"] = inquilino.IdInquilino;
-                    return RedirectToAction(nameof(Index));
+                    var inqui = repositorio.ObtenerPorEmail(inquilino.Email);
+                    var user = repoUsuario.ObtenerPorEmail(inquilino.Email);
+                    var prop = repoPropietario.ObtenerPorEmail(inquilino.Email);
+
+                    if (user == null && prop == null && (inqui == null || inqui.Email == inquilino.Email))
+                    {
+                        repositorio.Alta(inquilino);
+                        TempData["Id"] = inquilino.IdInquilino;
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        TempData["Error"] = "El Email ingresado ya se encuentra registrado en el sistema! ";
+                        ViewBag.Error = TempData["Error"];
+                        return View(inquilino);
+                    }
                 }
                 else
                 {
@@ -100,9 +117,22 @@ namespace Inmobiliaria.Controllers
         {
             try
             {
-                repositorio.Modificacion(i);
-                TempData["Mensaje"] = "Datos guardados correctamente";
-                return RedirectToAction(nameof(Index));
+                var inqui = repositorio.ObtenerPorEmail(i.Email);
+                var user = repoUsuario.ObtenerPorEmail(i.Email);
+                var prop = repoPropietario.ObtenerPorEmail(i.Email);
+
+                if (user == null && prop == null && (inqui == null || inqui.Email == i.Email))
+                {
+                    repositorio.Modificacion(i);
+                    TempData["Mensaje"] = "Datos guardados correctamente";
+                     return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData["Error"] = "El Email ingresado ya se encuentra registrado en el sistema! ";
+                    ViewBag.Error = TempData["Error"];
+                    return View(i);
+                }
             }
             catch (Exception ex)
             {
@@ -132,15 +162,14 @@ namespace Inmobiliaria.Controllers
         public ActionResult Delete(int id, Inquilino entidad)
         {
             try
-            {
+            {  entidad= repositorio.ObtenerPorId(id);
                 repositorio.Baja(id);
                 TempData["Mensaje"] = "Eliminación realizada correctamente";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                ViewBag.StackTrate = ex.StackTrace;
+                ViewBag.Error = "No se puede eliminar el Inquilino, ya que posee Contratos asociados";
                 return View(entidad);
             }
         }

@@ -8,7 +8,12 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-         
+
+            <div class="form-group">
+                <label asp-for="NroPago" class="control-label"></label>
+                <input asp-for="NroPago" class="form-control" type="number" min="1" max="100" />
+                <span asp-validation-for="NroPago" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="FechaPago" class="control-label"></label>
                 <input asp-for="FechaPago" class="form-control" />
@@ -16,10 +21,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="Importe" class="control-label"></label>
-                <input asp-for="Importe" class="form-control" />
+                <input asp-for="Importe" class="form-control" type="number" min="1" max="100000"/>
                 <span asp-validation-for="Importe" class="text-danger"></span>
             </div>
-           
+
             <div class="form-group">
                 <input type="submit" value="Crear" class="btn btn-dark" />
                 <a asp-action="PorContrato" asp-controller="Pago" asp-route-id="@ViewBag.ContId" title="Pago" class="btn btn-secondary">Volver</a>

@@ -63,7 +63,15 @@
 
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-dark" />
+                @if(ViewBag.Pro == null)
+                {
                 <a asp-action="Index" class="btn btn-secondary">Volver</a>
+                }
+                else{
+                   <a asp-action="PorPropietario" asp-controller="Inmueble" asp-route-id="@Model.PropietarioId" class="btn btn-secondary">Volver</a>
+                }
+
+
             </div>
         </form>
     </div>

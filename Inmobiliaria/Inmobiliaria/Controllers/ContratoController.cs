@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Inmobiliaria.Models;
+﻿using Inmobiliaria.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 
 namespace Inmobiliaria.Controllers
 {
@@ -17,12 +14,12 @@ namespace Inmobiliaria.Controllers
         private readonly IRepositorioInquilino repoInquilino;
         private readonly IConfiguration config;
 
-        public  ContratoController(IRepositorioContrato repositorio, IRepositorioInmueble repoInmueble, IRepositorioInquilino repoInquilino, IConfiguration config)
+        public ContratoController(IRepositorioContrato repositorio, IRepositorioInmueble repoInmueble, IRepositorioInquilino repoInquilino, IConfiguration config)
         {
             this.repositorio = repositorio;
             this.repoInquilino = repoInquilino;
             this.repoInmueble = repoInmueble;
-            
+
             this.config = config;
         }
 
@@ -30,12 +27,16 @@ namespace Inmobiliaria.Controllers
         [Authorize]
         public ActionResult Index()
         {
+
             var lista = repositorio.ObtenerTodos();
+
             if (TempData.ContainsKey("Id"))
                 ViewBag.Id = TempData["Id"];
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
-            return View(lista);
+            
+                return View(lista);
+
         }
 
         // GET: Contrato/Details/5
@@ -51,7 +52,7 @@ namespace Inmobiliaria.Controllers
         public ActionResult Create()
         {
             ViewBag.Inquilinos = repoInquilino.ObtenerTodos();
-            ViewBag.Inmuebles = repoInmueble.ObtenerTodos();
+            ViewBag.Inmuebles = repoInmueble.BuscarDisponibles();
             return View();
         }
 
@@ -65,25 +66,25 @@ namespace Inmobiliaria.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    int res= repositorio.Alta(entidad);
+                    int res = repositorio.Alta(entidad);
 
                     if (res == -1)
                     {
-                        TempData["Mensaje"] = "El inmueble se encuentra ocupado en las fechas seleccionadas";
+                        TempData["Error"] = "El inmueble se encuentra ocupado en las fechas seleccionadas";
                         return RedirectToAction(nameof(Index));
                     }
-                    else 
+                    else
                     {
-                     
+
                         TempData["Id"] = entidad.IdContrato;
                         return RedirectToAction("Index", "Pago", new { id = entidad.IdContrato });
                     }
-                
+
                 }
                 else
                 {
-                    ViewBag.Inquilinos = repoInquilino.ObtenerTodos(); 
-                    ViewBag.Inmuebles = repoInmueble.ObtenerTodos();
+                    ViewBag.Inquilinos = repoInquilino.ObtenerTodos();
+                    ViewBag.Inmuebles = repoInmueble.BuscarDisponibles();
                     return View(entidad);
                 }
             }
@@ -152,16 +153,65 @@ namespace Inmobiliaria.Controllers
         {
             try
             {
+                entidad = repositorio.ObtenerPorId(id);
                 repositorio.Baja(id);
                 TempData["Mensaje"] = "Eliminación realizada correctamente";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                ViewBag.StackTrate = ex.StackTrace;
+                ViewBag.Error ="No se puede eliminar el Contrato, ya que posee Pago/s asociados";
+                
                 return View(entidad);
             }
         }
+
+        [Authorize]
+        public ActionResult BuscarVigentes()
+        {
+            try
+            {
+                IList<Contrato> entidad = repositorio.ContratosVigentes();
+
+                if (entidad != null)
+                {
+                    ViewData["Title"] = "Contratos Vigentes";
+                    return View(nameof(Index), entidad);
+
+                }
+                else
+                {
+                    TempData["Mensaje"] = "El inmueble se encuentra ocupado en las fechas seleccionadas";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrate = ex.StackTrace;
+                return RedirectToAction(nameof(Index));
+            }
+
+        }
+
+        [Authorize]
+        public ActionResult PorInmueble(int id)
+        {
+            TempData["IdInmueble"] = id;
+
+
+            IList<Contrato> lista = repoInmueble.BuscarPorContrato(id);
+            if (TempData.ContainsKey("Id"))
+                ViewBag.Id = TempData["Id"];
+            if (TempData.ContainsKey("Mensaje"))
+                ViewBag.Mensaje = TempData["Mensaje"];
+
+            return View(lista);
+
+        }
+
+       
+
+
     }
 }

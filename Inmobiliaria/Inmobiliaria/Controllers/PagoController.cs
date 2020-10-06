@@ -161,7 +161,7 @@ namespace Inmobiliaria.Controllers
             {
                 ViewBag.IdCont = TempData["IdCont"];
                 int idCont = ViewBag.IdCont;
-
+                entidad = repositorio.ObtenerPorId(id);
                 repositorio.Baja(id);
 
                 TempData["Mensaje"] = "Eliminación realizada correctamente";
@@ -169,8 +169,7 @@ namespace Inmobiliaria.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                ViewBag.StackTrate = ex.StackTrace;
+                ViewBag.Error =" No se puede eliminar el Pago, ya que posee un Contrato asociado";
                 return View(entidad);
             }
         }

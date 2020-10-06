@@ -17,28 +17,38 @@ namespace Inmobiliaria.Models
 		public string Apellido { get; set; }
 		[Required]
 		public string Dni { get; set; }
+		[Required]
 		public string Telefono { get; set; }
+		[Required]
 		public string Direccion { get; set; }
 		[Required, EmailAddress]
 		public string Email { get; set; }
 
+		[Required]
 		[Display(Name = "Lugar de Trabajo")]
 		public string LugarTrabajo { get; set; }
-
+		
+		[Required]
 		[Display(Name = "Nombre Garante")]
+	
 		public string NombreGarante { get; set; }
 
 		[Display(Name = "Apellido Garante")]
+		[Required]
 		public string ApellidoGarante { get; set; }
 
 		[Display(Name = "Dni Garante")]
+		[Required]
 		public string DniGarante { get; set; }
 
 		[Display(Name = "Telefono Garante")]
+		[Required]
 		public string TelefonoGarante { get; set; }
-
+		
+		[Required]
 		[Display(Name = "Dirección Garante")]
 		public string DireccionGarante { get; set; }
+		
 
 	}
 }

@@ -22,12 +22,13 @@ namespace Inmobiliaria.Models
 			int res = -1;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"INSERT INTO Pago (FechaPago,Importe, ContratoId) " +
-					"VALUES (@fechaPago, @importe, @contratoId);" +
+				string sql = $"INSERT INTO Pago (NroPago,FechaPago,Importe, ContratoId) " +
+					"VALUES (@nroPago,@fechaPago, @importe, @contratoId);" +
 					"SELECT SCOPE_IDENTITY();";//devuelve el id insertado (LAST_INSERT_ID para mysql)
 				using (var command = new SqlCommand(sql, connection))
 				{
 					command.CommandType = CommandType.Text;
+					command.Parameters.AddWithValue("@nroPago", entidad.NroPago);
 					command.Parameters.AddWithValue("@fechaPago", entidad.FechaPago);
 					command.Parameters.AddWithValue("@importe", entidad.Importe);
 					command.Parameters.AddWithValue("@contratoId", id);
@@ -65,10 +66,11 @@ namespace Inmobiliaria.Models
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				string sql = "UPDATE Pago SET " +
-					"FechaPago=@fechaPago, Importe=@importe " +
+					"NroPago=nroPago,FechaPago=@fechaPago, Importe=@importe " +
 					"WHERE Id = @id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
+					command.Parameters.AddWithValue("@nroPago",entidad.NroPago);
 					command.Parameters.AddWithValue("@fechaPago", entidad.FechaPago);
 					command.Parameters.AddWithValue("@importe", entidad.Importe);
 					command.Parameters.AddWithValue("@id", entidad.IdPago);
@@ -86,7 +88,7 @@ namespace Inmobiliaria.Models
 			IList<Pago> res = new List<Pago>();
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = "SELECT p.Id, p.FechaPago,p.Importe,p.ContratoId,c.InquilinoId,c.InmuebleId" +
+				string sql = "SELECT p.Id,p.NroPago p.FechaPago,p.Importe,p.ContratoId,c.InquilinoId,c.InmuebleId" +
 					" FROM Pago p INNER JOIN Contrato c ON p.ContratoId = c.Id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
@@ -98,14 +100,15 @@ namespace Inmobiliaria.Models
 						Pago entidad = new Pago
 						{
 							IdPago = reader.GetInt32(0),
-							FechaPago = reader.GetDateTime(1),
-							Importe = reader.GetDecimal(2),
-							ContratoId = reader.GetInt32(3),
+							NroPago = reader.GetInt32(1),
+							FechaPago = reader.GetDateTime(2),
+							Importe = reader.GetDecimal(3),
+							ContratoId = reader.GetInt32(4),
 							Contrato = new Contrato
 							{
-								IdContrato = reader.GetInt32(3),
-								InquilinoId = reader.GetInt32(4),
-							    InmuebleId = reader.GetInt32(5),
+								IdContrato = reader.GetInt32(5),
+								InquilinoId = reader.GetInt32(6),
+							    InmuebleId = reader.GetInt32(7),
 							}
 						};
 						res.Add(entidad);
@@ -121,7 +124,7 @@ namespace Inmobiliaria.Models
 			Pago entidad = null;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"SELECT p.Id, p.FechaPago, p.Importe,p.ContratoId,c.InquilinoId,c.InmuebleId" +
+				string sql = $"SELECT p.Id,p.NroPago, p.FechaPago, p.Importe,p.ContratoId,c.InquilinoId,c.InmuebleId" +
 					$" FROM Pago p INNER JOIN Contrato c ON p.ContratoId = c.Id" +
 					$" WHERE p.Id=@id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
@@ -135,14 +138,15 @@ namespace Inmobiliaria.Models
 						 entidad = new Pago
 						{
 							IdPago = reader.GetInt32(0),
-							FechaPago = reader.GetDateTime(1),
-							Importe = reader.GetDecimal(2),
-							ContratoId = reader.GetInt32(3),
+							NroPago=reader.GetInt32(1),
+							FechaPago = reader.GetDateTime(2),
+							Importe = reader.GetDecimal(3),
+							ContratoId = reader.GetInt32(4),
 							Contrato = new Contrato
 							{
-								IdContrato = reader.GetInt32(3),
-								InquilinoId = reader.GetInt32(4),
-								InmuebleId = reader.GetInt32(5),
+								IdContrato = reader.GetInt32(4),
+								InquilinoId = reader.GetInt32(5),
+								InmuebleId = reader.GetInt32(6),
 							}
 						};
 					}
@@ -158,7 +162,7 @@ namespace Inmobiliaria.Models
 			Pago entidad = null;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"SELECT p.Id, p.FechaPago,p.Importe,p.ContratoId,c.InquilinoId,InmuebleId" +
+				string sql = $"SELECT p.Id,p.NroPago, p.FechaPago,p.Importe,p.ContratoId,c.InquilinoId,InmuebleId" +
 					$" FROM Pago p INNER JOIN Contrato c ON p.ContratoId = c.Id" +
 					$" WHERE ContratoId=@id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
@@ -172,14 +176,15 @@ namespace Inmobiliaria.Models
 						entidad = new Pago
 						{
 							IdPago = reader.GetInt32(0),
-							FechaPago = reader.GetDateTime(1),
-							Importe = reader.GetDecimal(2),
-							ContratoId = reader.GetInt32(3),
+							NroPago=reader.GetInt32(1),
+							FechaPago = reader.GetDateTime(2),
+							Importe = reader.GetDecimal(3),
+							ContratoId = reader.GetInt32(4),
 							Contrato = new Contrato
 							{
-								IdContrato = reader.GetInt32(3),
-								InquilinoId = reader.GetInt32(4),
-								InmuebleId = reader.GetInt32(5),
+								IdContrato = reader.GetInt32(4),
+								InquilinoId = reader.GetInt32(5),
+								InmuebleId = reader.GetInt32(6),
 							}
 						};
 						res.Add(entidad);

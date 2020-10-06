@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace Inmobiliaria.Controllers
 {
@@ -14,9 +15,9 @@ namespace Inmobiliaria.Controllers
     {
         private readonly IRepositorioInmueble repositorio;
         private readonly IConfiguration config;
-    
 
-        public InmuebleController(IRepositorioInmueble repositorio,IConfiguration config)
+
+        public InmuebleController(IRepositorioInmueble repositorio, IConfiguration config)
         {
             this.repositorio = repositorio;
             this.config = config;
@@ -26,20 +27,34 @@ namespace Inmobiliaria.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            //String dis = (string)TempData["DisInmueble"];
+            //IList<Inmueble> dis = TempData["Disponibles"] as IList<Inmueble>;
+            /*if (dis != null)
+            {
+                var lista = JsonConvert.DeserializeObject<List<Inmueble>>((string)TempData["Disponibles"]);
+                ViewData["Title"] = "INMUEBLES DISPONIBLES";
+                return View(lista);
+            }
+            else 
+            {}*/
+
             var lista = repositorio.ObtenerTodos();
-     
+            ViewData["Title"] = "INMUEBLES";
             if (TempData.ContainsKey("Id"))
                 ViewBag.Id = TempData["Id"];
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
+
             return View(lista);
+
         }
 
         [Authorize]
         public ActionResult PorPropietario(int id)
         {
-              TempData["IdPro"] = id;
-            
+            TempData["IdPro"] = id;
+
+            TempData["pro"] = id;
 
             var lista = repositorio.BuscarPorPropietario(id);
             if (TempData.ContainsKey("Id"))
@@ -61,9 +76,10 @@ namespace Inmobiliaria.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            ViewBag.IdPro = TempData["IdPro"];
             ViewBag.Usos = Inmueble.ObtenerUsos();
             ViewBag.Tipos = Inmueble.ObtenerTipos();
-            
+
             return View();
         }
 
@@ -73,7 +89,7 @@ namespace Inmobiliaria.Controllers
         [Authorize]
         public ActionResult Create(Inmueble entidad)
         {
-            
+
             ViewBag.IdPro = TempData["IdPro"];
             int id = ViewBag.IdPro;
 
@@ -81,9 +97,9 @@ namespace Inmobiliaria.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    repositorio.Alta(entidad,id);
+                    repositorio.Alta(entidad, id);
                     TempData["Id"] = entidad.IdInmueble;
-                    return RedirectToAction("PorPropietario", new {id = id });
+                    return RedirectToAction("PorPropietario", new { id = id });
                 }
                 else
                 {
@@ -109,6 +125,7 @@ namespace Inmobiliaria.Controllers
         {
             var entidad = repositorio.ObtenerPorId(id);
             TempData["IdPro"] = entidad.PropietarioId;
+            ViewBag.Pro = TempData["pro"];
             //ViewBag.Propietarios = repositorio.ObtenerTodos();
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
@@ -127,13 +144,16 @@ namespace Inmobiliaria.Controllers
         {
             try
             {
-                entidad.IdInmueble = id;
-                ViewBag.IdPro = TempData["IdPro"];
+                 ViewBag.IdPro = TempData["IdPro"];
+               
                 int idPro = ViewBag.IdPro;
-
-                repositorio.Modificacion(entidad);
-                TempData["Mensaje"] = "Datos guardados correctamente";
-                return RedirectToAction("PorPropietario", new { id = idPro });
+               
+                    entidad.IdInmueble = id;
+                    repositorio.Modificacion(entidad);
+                    TempData["Mensaje"] = "Datos guardados correctamente";
+                    return RedirectToAction("PorPropietario", new { id = idPro });
+               
+               
             }
             catch (Exception ex)
             {
@@ -152,6 +172,7 @@ namespace Inmobiliaria.Controllers
         {
             var entidad = repositorio.ObtenerPorId(id);
             TempData["IdPro"] = entidad.PropietarioId;
+            ViewBag.Pro = TempData["pro"];
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
             if (TempData.ContainsKey("Error"))
@@ -168,19 +189,66 @@ namespace Inmobiliaria.Controllers
             try
             {
                 ViewBag.IdPro = TempData["IdPro"];
+                entidad = repositorio.ObtenerPorId(id);
                 int idPro = ViewBag.IdPro;
 
                 repositorio.Baja(id);
-               
+
                 TempData["Mensaje"] = "Eliminación realizada correctamente";
                 return RedirectToAction("PorPropietario", new { id = idPro });
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                ViewBag.StackTrate = ex.StackTrace;
+                ViewBag.Error =" No se puede eliminar el Inmueble, ya que posee Contratos asociados";
+
+
                 return View(entidad);
             }
         }
+
+        [Authorize]
+        public ActionResult InmueblesDisponibles()
+     {
+            try
+            {
+                IList<Inmueble> lista =repositorio.BuscarDisponibles();
+
+                ViewData["Title"] = "INMUEBLES DISPONIBLES";
+                //TempData["Disponibles"] = JsonConvert.SerializeObject(dis);
+                //TempData["DisInmueble"] = "Activo";
+                return View(nameof(Index), lista);
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrate = ex.StackTrace;
+                return RedirectToAction(nameof(Index)); 
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult BuscarInmueblesPorFecha(BusquedaPorFechas busqueda)
+        {
+
+            var lista = repositorio.BuscarInmueblesDisponibles(busqueda.FechaInicio, busqueda.FechaFin);
+            ViewData["Title"] = "INMUEBLES DISPONIBLES";
+            ViewData["Title2"] = "Periodo: "+ busqueda.FechaInicio.ToShortDateString() +"-"+ busqueda.FechaFin.ToShortDateString();
+
+            if (TempData.ContainsKey("Id"))
+                ViewBag.Id = TempData["Id"];
+            if (TempData.ContainsKey("Mensaje"))
+                ViewBag.Mensaje = TempData["Mensaje"];
+
+
+            return View(nameof(Index), lista);
+
+        }
+
+
+
+
+
     }
 }

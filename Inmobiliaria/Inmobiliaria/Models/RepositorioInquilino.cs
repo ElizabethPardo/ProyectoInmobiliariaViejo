@@ -181,7 +181,7 @@ namespace Inmobiliaria.Models
 			Inquilino i = null;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"SELECT IdPropietario, Nombre, Apellido, Dni, Telefono, Email, Clave FROM Inquilino" +
+				string sql = $"SELECT Id, Nombre, Apellido, Dni, Telefono, Email FROM Inquilino" +
 					$" WHERE Email=@email";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{

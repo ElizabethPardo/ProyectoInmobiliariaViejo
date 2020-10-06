@@ -14,20 +14,23 @@ namespace Inmobiliaria.Models
         [Display(Name = "Código")]
         public int IdContrato { get; set; }
 
+        [Required]
         [Display(Name = "Fecha Ingreso")]
         [DataType(DataType.Date)]
         public DateTime FechaDesde { get; set; }
 
+        [Required]
         [Display(Name = "Fecha Salida")]
         [DataType(DataType.Date)]
         public DateTime FechaHasta { get; set; }
 
+        [Required]
         [Display(Name = "Inquilino")]
         public int InquilinoId { get; set; }
         [ForeignKey("InquilinoId")]
-
         public Inquilino Inquilino { get; set; }
 
+        [Required]
         [Display(Name = "Inmueble")]
         public int InmuebleId { get; set; }
         [ForeignKey("InmuebleId")]
