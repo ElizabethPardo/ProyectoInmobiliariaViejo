@@ -27,7 +27,8 @@ namespace Inmobiliaria.Models
 			{
 				string sql = $"SELECT InmuebleId " +
 							" FROM Contrato WHERE (@fechaDesde >= FechaDesde or @fechaHasta >=  FechaDesde)" +
-                                 " and(@fechaDesde <= FechaHasta or @fechaHasta <= FechaHasta) ";
+                                 " and(@fechaDesde <= FechaHasta or @fechaHasta <= FechaHasta) " +
+								 "  and Id=@inmuebleId ";
 
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
@@ -236,7 +237,8 @@ namespace Inmobiliaria.Models
 				string sql = "SELECT c.Id, c.FechaDesde, c.FechaHasta, c.InquilinoId, i.Nombre, i.Apellido, c.InmuebleId,e.direccion,e.propietarioId" +
 							  " FROM Contrato c INNER JOIN Inquilino i ON i.Id = c.InquilinoId" +
 							  " INNER JOIN Inmueble e ON  e.Id = c.InmuebleId"+
-							  " WHERE FechaDesde >= @fin or FechaHasta >= @inicio";
+							  " WHERE FechaDesde <= @fin AND FechaHasta >= @inicio;";
+				
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.Parameters.Add("@inicio", SqlDbType.Date).Value = inicio;
