@@ -2,13 +2,10 @@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-    ViewData["Title"] = "Contratos";
 
-}
 <h2>
-    CONTRATOS DE ALQUILER
-</h2>
+    @ViewBag.Title
+</h2><BR>
 
         <form class="form-inline" asp-action="BuscarInmueblesPorFecha" asp-controller="Inmueble">
             <div class="input-group mb-2 mr-sm-2">
@@ -21,11 +18,21 @@
             </div>
             <button type="submit" class="btn btn-dark" style="margin-bottom: 9px;">Inmuebles disponibles</button>
         </form>
+        <form class="form-inline" asp-action="BuscarVigentes" asp-controller="Contrato">
+            <div class="input-group mb-2 mr-sm-2">
+                <label for="FechaInicio" class="control-label"></label>
+                <input name="FechaInicio" type="date" class="form-control" required />
+            </div>
+            <div class="input-group mb-2 mr-sm-2">
+                <label for="FechaFin" class="control-label"></label>
+                <input name="FechaFin" type="date" class="form-control" required />
+            </div>
+            <button type="submit" class="btn btn-dark" style="margin-bottom: 9px;">Contratos Vigentes</button>
+        </form>
    
 
 <br>
     <a asp-action="Create" class="btn btn-dark" style="width:180px;">Crear nuevo <i class="fas fa-plus"> </i></a>
-     <a asp-action="BuscarVigentes" title="Vigentes" class="btn btn-dark" style="width:180px;">Contratos Vigentes</a>
 
 <br>
 <br>
@@ -42,7 +49,7 @@
                 @Html.DisplayNameFor(model => model.FechaHasta)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Inquilino.Nombre)
+                @Html.DisplayNameFor(model => model.Inquilino)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Inmueble.Direccion)

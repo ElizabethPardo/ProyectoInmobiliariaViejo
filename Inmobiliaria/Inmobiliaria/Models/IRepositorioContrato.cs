@@ -8,7 +8,7 @@ namespace Inmobiliaria.Models
     public interface IRepositorioContrato : IRepositorio<Contrato>
     {
         int ValidarDisponibilidad(DateTime fechaDesde, DateTime fechaHasta, int inmuebleId);
-        IList<Contrato> ContratosVigentes();
+        IList<Contrato> ContratosVigentes(DateTime inicio, DateTime fin);
        
     }
 }

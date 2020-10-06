@@ -27,7 +27,7 @@ namespace Inmobiliaria.Controllers
         [Authorize]
         public ActionResult Index()
         {
-
+            ViewData["Title"] = "CONTRATOS DE ALQUILER";
             var lista = repositorio.ObtenerTodos();
             if (TempData.ContainsKey("Error"))
                 ViewBag.Error = TempData["Error"];
@@ -120,9 +120,24 @@ namespace Inmobiliaria.Controllers
             try
             {
                 entidad.IdContrato = id;
-                repositorio.Modificacion(entidad);
-                TempData["Mensaje"] = "Datos guardados correctamente";
-                return RedirectToAction(nameof(Index));
+                int res = repositorio.Modificacion(entidad);
+
+                if (res == -1)
+                {
+                    TempData["Error"] = "El inmueble se encuentra ocupado en las fechas seleccionadas";
+                    ViewBag.Inquilinos = repoInquilino.ObtenerTodos();
+                    ViewBag.Inmuebles = repoInmueble.ObtenerTodos();
+                    ViewBag.Error = TempData["Error"];
+                    return View(entidad);
+                }
+                else
+                {
+
+                    TempData["Id"] = entidad.IdContrato;
+                    TempData["Mensaje"] = "Datos guardados correctamente";
+                    return RedirectToAction(nameof(Index));
+
+                }
             }
             catch (Exception ex)
             {
@@ -168,15 +183,15 @@ namespace Inmobiliaria.Controllers
         }
 
         [Authorize]
-        public ActionResult BuscarVigentes()
+        public ActionResult BuscarVigentes(BusquedaPorFechas busqueda)
         {
             try
             {
-                IList<Contrato> entidad = repositorio.ContratosVigentes();
+                IList<Contrato> entidad = repositorio.ContratosVigentes(busqueda.FechaInicio, busqueda.FechaFin);
 
                 if (entidad != null)
                 {
-                    ViewData["Title"] = "Contratos Vigentes";
+                    ViewData["Title"] = "CONTRATOS VIGENTES";
                     return View(nameof(Index), entidad);
 
                 }
@@ -200,7 +215,7 @@ namespace Inmobiliaria.Controllers
         {
             TempData["IdInmueble"] = id;
 
-
+            ViewData["Title"] = "CONTRATOS DE ALQUILER";
             IList<Contrato> lista = repoInmueble.BuscarPorContrato(id);
             if (TempData.ContainsKey("Id"))
                 ViewBag.Id = TempData["Id"];

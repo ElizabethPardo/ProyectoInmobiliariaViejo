@@ -107,22 +107,28 @@ namespace Inmobiliaria.Models
 		public int Modificacion(Contrato entidad)
 		{
 			int res = -1;
-			using (SqlConnection connection = new SqlConnection(connectionString))
+			int disponibilidad = ValidarDisponibilidad(entidad.FechaDesde, entidad.FechaHasta, entidad.InmuebleId);
+
+			if (disponibilidad == 1)
 			{
-				string sql = "UPDATE Contrato SET " +
-					"FechaDesde=@fechaDesde, FechaHasta=@fechaHasta, InquilinoId=@inquilinoId, InmuebleId=@inmuebleId " +
-					"WHERE Id = @id";
-				using (SqlCommand command = new SqlCommand(sql, connection))
+
+				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
-					command.Parameters.AddWithValue("@fechaDesde", entidad.FechaDesde);
-					command.Parameters.AddWithValue("@fechaHasta", entidad.FechaHasta);
-					command.Parameters.AddWithValue("@inquilinoId", entidad.InquilinoId);
-					command.Parameters.AddWithValue("@inmuebleId", entidad.InmuebleId);
-					command.Parameters.AddWithValue("@id", entidad.IdContrato);
-					command.CommandType = CommandType.Text;
-					connection.Open();
-					res = command.ExecuteNonQuery();
-					connection.Close();
+					string sql = "UPDATE Contrato SET " +
+						"FechaDesde=@fechaDesde, FechaHasta=@fechaHasta, InquilinoId=@inquilinoId, InmuebleId=@inmuebleId " +
+						"WHERE Id = @id";
+					using (SqlCommand command = new SqlCommand(sql, connection))
+					{
+						command.Parameters.AddWithValue("@fechaDesde", entidad.FechaDesde);
+						command.Parameters.AddWithValue("@fechaHasta", entidad.FechaHasta);
+						command.Parameters.AddWithValue("@inquilinoId", entidad.InquilinoId);
+						command.Parameters.AddWithValue("@inmuebleId", entidad.InmuebleId);
+						command.Parameters.AddWithValue("@id", entidad.IdContrato);
+						command.CommandType = CommandType.Text;
+						connection.Open();
+						res = command.ExecuteNonQuery();
+						connection.Close();
+					}
 				}
 			}
 			return res;
@@ -221,7 +227,7 @@ namespace Inmobiliaria.Models
 			return entidad;
 		}
 
-		public IList<Contrato> ContratosVigentes() 
+		public IList<Contrato> ContratosVigentes(DateTime inicio, DateTime fin) 
 		{
 			IList<Contrato> res = new List<Contrato>();
 
@@ -230,9 +236,11 @@ namespace Inmobiliaria.Models
 				string sql = "SELECT c.Id, c.FechaDesde, c.FechaHasta, c.InquilinoId, i.Nombre, i.Apellido, c.InmuebleId,e.direccion,e.propietarioId" +
 							  " FROM Contrato c INNER JOIN Inquilino i ON i.Id = c.InquilinoId" +
 							  " INNER JOIN Inmueble e ON  e.Id = c.InmuebleId"+
-							  " WHERE FechaDesde >= GETDATE() or FechaHasta >= GETDATE()";
+							  " WHERE FechaDesde >= @fin or FechaHasta >= @inicio";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
+					command.Parameters.Add("@inicio", SqlDbType.Date).Value = inicio;
+					command.Parameters.Add("@fin", SqlDbType.Date).Value = fin;
 					command.CommandType = CommandType.Text;
 					connection.Open();
 					var reader = command.ExecuteReader();
