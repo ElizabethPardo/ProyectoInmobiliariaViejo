@@ -36,7 +36,7 @@ namespace Inmobiliaria.Models
 					connection.Open();
 					res = Convert.ToInt32(command.ExecuteScalar());
 					entidad.PropietarioId = propietarioId;
-					entidad.IdInmueble = res;
+					entidad.Id = res;
 
 					connection.Close();
 				}
@@ -76,7 +76,7 @@ namespace Inmobiliaria.Models
 					command.Parameters.AddWithValue("@tipo", entidad.Tipo);
 					command.Parameters.AddWithValue("@precio", entidad.Precio);
 					command.Parameters.AddWithValue("@estado", entidad.Estado);
-					command.Parameters.AddWithValue("@id", entidad.IdInmueble);
+					command.Parameters.AddWithValue("@id", entidad.Id);
 					command.CommandType = CommandType.Text;
 					connection.Open();
 					res = command.ExecuteNonQuery();
@@ -102,7 +102,7 @@ namespace Inmobiliaria.Models
 					{
 						Inmueble entidad = new Inmueble
 						{
-							IdInmueble = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							Direccion = reader.GetString(1),
 							Ambientes = reader.GetInt32(2),
 							Uso = reader.GetInt32(3),
@@ -112,7 +112,7 @@ namespace Inmobiliaria.Models
 							PropietarioId = reader.GetInt32(7),
 							Duenio = new Propietario
 							{
-								IdPropietario = reader.GetInt32(7),
+								Id = reader.GetInt32(7),
 								Nombre = reader.GetString(8),
 								Apellido = reader.GetString(9),
 							}
@@ -142,7 +142,7 @@ namespace Inmobiliaria.Models
 					{
 						entidad = new Inmueble
 						{
-							IdInmueble = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							Direccion = reader.GetString(1),
 							Ambientes = reader.GetInt32(2),
 							Uso = reader.GetInt32(3),
@@ -152,7 +152,7 @@ namespace Inmobiliaria.Models
 							PropietarioId = reader.GetInt32(7),
 							Duenio = new Propietario
 							{
-								IdPropietario = reader.GetInt32(7),
+								Id = reader.GetInt32(7),
 								Nombre = reader.GetString(8),
 								Apellido = reader.GetString(9),
 							}
@@ -183,7 +183,7 @@ namespace Inmobiliaria.Models
 					{
 						entidad = new Inmueble
 						{
-							IdInmueble = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							Direccion = reader.GetString(1),
 							Ambientes = reader.GetInt32(2),
 							Uso = reader.GetInt32(3),
@@ -194,7 +194,7 @@ namespace Inmobiliaria.Models
 							PropietarioId = reader.GetInt32(7),
 							Duenio = new Propietario
 							{
-								IdPropietario = reader.GetInt32(7),
+								Id = reader.GetInt32(7),
 								Nombre = reader.GetString(8),
 								Apellido = reader.GetString(9),
 							}
@@ -230,7 +230,7 @@ namespace Inmobiliaria.Models
 					{
 						Inmueble entidad = new Inmueble
 						{
-							IdInmueble = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							Direccion = reader.GetString(1),
 							Ambientes = reader.GetInt32(2),
 							Uso = reader.GetInt32(3),
@@ -240,7 +240,7 @@ namespace Inmobiliaria.Models
 							PropietarioId = reader.GetInt32(7),
 							Duenio = new Propietario
 							{
-								IdPropietario = reader.GetInt32(7),
+								Id = reader.GetInt32(7),
 								Nombre = reader.GetString(8),
 								Apellido = reader.GetString(9),
 							}
@@ -275,14 +275,14 @@ namespace Inmobiliaria.Models
 					{
 						Contrato entidad = new Contrato
 						{
-							IdContrato = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							FechaDesde = reader.GetDateTime(1),
 							FechaHasta = reader.GetDateTime(2),
 
 							InquilinoId = reader.GetInt32(3),
 							Inquilino = new Inquilino
 							{
-								IdInquilino = reader.GetInt32(3),
+								Id= reader.GetInt32(3),
 								Nombre = reader.GetString(4),
 								Apellido = reader.GetString(5),
 							},
@@ -290,7 +290,7 @@ namespace Inmobiliaria.Models
 							InmuebleId = reader.GetInt32(6),
 							Inmueble = new Inmueble
 							{
-								IdInmueble = reader.GetInt32(6),
+								Id = reader.GetInt32(6),
 								Direccion = reader.GetString(7),
 								PropietarioId = reader.GetInt32(8),
 							}
@@ -326,7 +326,7 @@ namespace Inmobiliaria.Models
 					{
 						Inmueble entidad = new Inmueble
 						{
-							IdInmueble = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							Direccion = reader.GetString(1),
 							Ambientes = reader.GetInt32(2),
 							Uso = reader.GetInt32(3),
@@ -336,7 +336,7 @@ namespace Inmobiliaria.Models
 							PropietarioId = reader.GetInt32(7),
 							Duenio = new Propietario
 							{
-								IdPropietario = reader.GetInt32(7),
+								Id = reader.GetInt32(7),
 								Nombre = reader.GetString(8),
 								Apellido = reader.GetString(9),
 							}

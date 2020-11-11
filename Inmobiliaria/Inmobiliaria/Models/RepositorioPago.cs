@@ -34,7 +34,7 @@ namespace Inmobiliaria.Models
 					command.Parameters.AddWithValue("@contratoId", id);
 					connection.Open();
 					res = Convert.ToInt32(command.ExecuteScalar());
-					entidad.IdPago = res;
+					entidad.Id = res;
 					entidad.ContratoId = id;
 
 					connection.Close();
@@ -73,7 +73,7 @@ namespace Inmobiliaria.Models
 					command.Parameters.AddWithValue("@nroPago",entidad.NroPago);
 					command.Parameters.AddWithValue("@fechaPago", entidad.FechaPago);
 					command.Parameters.AddWithValue("@importe", entidad.Importe);
-					command.Parameters.AddWithValue("@id", entidad.IdPago);
+					command.Parameters.AddWithValue("@id", entidad.Id);
 					command.CommandType = CommandType.Text;
 					connection.Open();
 					res = command.ExecuteNonQuery();
@@ -99,14 +99,14 @@ namespace Inmobiliaria.Models
 					{
 						Pago entidad = new Pago
 						{
-							IdPago = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							NroPago = reader.GetInt32(1),
 							FechaPago = reader.GetDateTime(2),
 							Importe = reader.GetDecimal(3),
 							ContratoId = reader.GetInt32(4),
 							Contrato = new Contrato
 							{
-								IdContrato = reader.GetInt32(5),
+								Id = reader.GetInt32(5),
 								InquilinoId = reader.GetInt32(6),
 							    InmuebleId = reader.GetInt32(7),
 							}
@@ -137,14 +137,14 @@ namespace Inmobiliaria.Models
 					{
 						 entidad = new Pago
 						{
-							IdPago = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							NroPago=reader.GetInt32(1),
 							FechaPago = reader.GetDateTime(2),
 							Importe = reader.GetDecimal(3),
 							ContratoId = reader.GetInt32(4),
 							Contrato = new Contrato
 							{
-								IdContrato = reader.GetInt32(4),
+								Id = reader.GetInt32(4),
 								InquilinoId = reader.GetInt32(5),
 								InmuebleId = reader.GetInt32(6),
 							}
@@ -175,14 +175,14 @@ namespace Inmobiliaria.Models
 					{
 						entidad = new Pago
 						{
-							IdPago = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							NroPago=reader.GetInt32(1),
 							FechaPago = reader.GetDateTime(2),
 							Importe = reader.GetDecimal(3),
 							ContratoId = reader.GetInt32(4),
 							Contrato = new Contrato
 							{
-								IdContrato = reader.GetInt32(4),
+								Id = reader.GetInt32(4),
 								InquilinoId = reader.GetInt32(5),
 								InmuebleId = reader.GetInt32(6),
 							}

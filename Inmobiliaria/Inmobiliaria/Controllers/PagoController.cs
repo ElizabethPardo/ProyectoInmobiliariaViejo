@@ -83,7 +83,7 @@ namespace Inmobiliaria.Controllers
                 if (ModelState.IsValid)
                 {
                     repositorio.Alta(entidad, id);
-                    TempData["Id"] = entidad.IdPago;
+                    TempData["Id"] = entidad.Id;
                     TempData["IdCont"] = entidad.ContratoId;
                     return RedirectToAction("PorContrato", new { id = id });
                 }

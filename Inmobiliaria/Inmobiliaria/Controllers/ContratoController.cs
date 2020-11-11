@@ -77,8 +77,8 @@ namespace Inmobiliaria.Controllers
                     else
                     {
 
-                        TempData["Id"] = entidad.IdContrato;
-                        return RedirectToAction("Index", "Pago", new { id = entidad.IdContrato });
+                        TempData["Id"] = entidad.Id;
+                        return RedirectToAction("Index", "Pago", new { id = entidad.Id });
                     }
 
                 }
@@ -119,7 +119,7 @@ namespace Inmobiliaria.Controllers
         {
             try
             {
-                entidad.IdContrato = id;
+                entidad.Id = id;
                 int res = repositorio.Modificacion(entidad);
 
                 if (res == -1)
@@ -133,7 +133,7 @@ namespace Inmobiliaria.Controllers
                 else
                 {
 
-                    TempData["Id"] = entidad.IdContrato;
+                    TempData["Id"] = entidad.Id;
                     TempData["Mensaje"] = "Datos guardados correctamente";
                     return RedirectToAction(nameof(Index));
 

@@ -8,7 +8,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="IdPago" value="@Model.IdPago" readonly />
+            <input type="hidden" name="IdPago" value="@Model.Id" readonly />
 
             <div class="form-group">
                 <label asp-for="NroPago" class="control-label"></label>

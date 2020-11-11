@@ -72,7 +72,7 @@ namespace Inmobiliaria.Controllers
                     if (user == null && prop == null && (inqui == null || inqui.Email == inquilino.Email))
                     {
                         repositorio.Alta(inquilino);
-                        TempData["Id"] = inquilino.IdInquilino;
+                        TempData["Id"] = inquilino.Id;
                         return RedirectToAction(nameof(Index));
                     }
                     else

@@ -23,7 +23,7 @@
         <thead class="thead-dark">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.IdPropietario)
+                    @Html.DisplayNameFor(model => model.Id)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Nombre)
@@ -51,7 +51,7 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.IdPropietario)
+                        @Html.DisplayFor(modelItem => item.Id)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Nombre)
@@ -72,13 +72,13 @@
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.IdPropietario" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+                        <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
                         @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
                         {
-                            <a asp-action="Delete" asp-route-id="@item.IdPropietario" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
                         }
 
-                        &nbsp; <a asp-action="PorPropietario" asp-controller="Inmueble" asp-route-id="@item.IdPropietario" title="Propiedades"><i class="fas fa-building"></i></a>
+                        &nbsp; <a asp-action="PorPropietario" asp-controller="Inmueble" asp-route-id="@item.Id" title="Propiedades"><i class="fas fa-building"></i></a>
 
                     </td>
                 </tr>

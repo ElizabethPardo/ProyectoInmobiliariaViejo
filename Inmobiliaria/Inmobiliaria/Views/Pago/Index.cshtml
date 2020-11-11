@@ -11,7 +11,7 @@
     <thead class="thead-dark">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.IdPago)
+                @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.NroPago)
@@ -30,7 +30,7 @@
         {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.IdPago)
+                @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NroPago)
@@ -43,10 +43,10 @@
             </td>
 
             <td>
-              <a asp-action="Edit" asp-route-id="@item.IdPago" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+              <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
               @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
               {
-                 <a asp-action="Delete" asp-route-id="@item.IdPago" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+                 <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
               }
             </td>
         </tr>

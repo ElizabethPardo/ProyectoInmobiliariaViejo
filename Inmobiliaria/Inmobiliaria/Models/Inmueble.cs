@@ -23,8 +23,9 @@ namespace Inmobiliaria.Models
     }
     public class Inmueble
     {
+        [Key]
         [Display(Name = "Código")]
-        public int IdInmueble { get; set; }
+        public int Id { get; set; }
         [Required]
         public string Direccion { get; set; }
         [Required]
@@ -44,6 +45,7 @@ namespace Inmobiliaria.Models
         [ForeignKey("PropietarioId")]
         public Propietario Duenio { get; set; }
 
+        [NotMapped]
         public string TipoNombre => Tipo > 0 ? ((enTipo)Tipo).ToString() : "";
         public static IDictionary<int, string> ObtenerTipos()
         {
@@ -56,7 +58,9 @@ namespace Inmobiliaria.Models
             return tipos;
         }
 
+        [NotMapped]
         public string UsoNombre => Uso > 0 ? ((enUso)Uso).ToString() : "";
+
         public static IDictionary<int, string> ObtenerUsos()
         {
             SortedDictionary<int, string> usos = new SortedDictionary<int, string>();

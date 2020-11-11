@@ -10,9 +10,9 @@ namespace Inmobiliaria.Models
 {
     public class Contrato
     {
-
+        [Key]
         [Display(Name = "Código")]
-        public int IdContrato { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [Display(Name = "Fecha Ingreso")]

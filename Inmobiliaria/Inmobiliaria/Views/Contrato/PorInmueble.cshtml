@@ -37,7 +37,7 @@
     <thead class="thead-dark">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.IdContrato)
+                @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FechaDesde)
@@ -60,7 +60,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IdContrato)
+                    @Html.DisplayFor(modelItem => item.Id)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FechaDesde)
@@ -77,12 +77,12 @@
                 </td>
 
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.IdContrato" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+                    <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
                     @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
                     {
-                        <a asp-action="Delete" asp-route-id="@item.IdContrato" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
                     }
-                    &nbsp;<a asp-action="PorContrato" asp-controller="Pago" asp-route-id="@item.IdContrato" title="Pago"><i class="fas fa-money-check-alt"></i></a>
+                    &nbsp;<a asp-action="PorContrato" asp-controller="Pago" asp-route-id="@item.Id" title="Pago"><i class="fas fa-money-check-alt"></i></a>
 
                 </td>
             </tr>

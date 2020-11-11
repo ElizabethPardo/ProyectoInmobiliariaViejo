@@ -42,7 +42,7 @@ namespace Inmobiliaria.Models
 					connection.Open();
 		
 					res = Convert.ToInt32(command.ExecuteScalar());
-					e.IdInquilino = res;
+					e.Id = res;
 					connection.Close();
 
 				}
@@ -90,7 +90,7 @@ namespace Inmobiliaria.Models
 					command.Parameters.AddWithValue("@dni_garante", e.DniGarante);
 					command.Parameters.AddWithValue("@telefono_garante", e.TelefonoGarante);
 					command.Parameters.AddWithValue("@direccion_garante", e.DireccionGarante);
-					command.Parameters.AddWithValue("@id", e.IdInquilino);
+					command.Parameters.AddWithValue("@id", e.Id);
 					connection.Open();
 					res = command.ExecuteNonQuery();
 					connection.Close();
@@ -115,7 +115,7 @@ namespace Inmobiliaria.Models
 					{
 						Inquilino p = new Inquilino
 						{
-							IdInquilino = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							Nombre = reader.GetString(1),
 							Apellido = reader.GetString(2),
 							Dni = reader.GetString(3),
@@ -154,7 +154,7 @@ namespace Inmobiliaria.Models
 					{
 						p = new Inquilino
 						{
-							IdInquilino = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							Nombre = reader.GetString(1),
 							Apellido = reader.GetString(2),
 							Dni = reader.GetString(3),
@@ -193,7 +193,7 @@ namespace Inmobiliaria.Models
 					{
 						i = new Inquilino
 						{
-							IdInquilino = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							Nombre = reader.GetString(1),
 							Apellido = reader.GetString(2),
 							Dni = reader.GetString(3),
@@ -227,7 +227,7 @@ namespace Inmobiliaria.Models
 					{
 						i = new Inquilino
 						{
-							IdInquilino = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							Nombre = reader.GetString(1),
 							Apellido = reader.GetString(2),
 							Dni = reader.GetString(3),

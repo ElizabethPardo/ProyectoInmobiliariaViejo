@@ -99,7 +99,7 @@ namespace Inmobiliaria.Controllers
                 if (ModelState.IsValid)
                 {
                     repositorio.Alta(entidad, id);
-                    TempData["Id"] = entidad.IdInmueble;
+                    TempData["Id"] = entidad.Id;
                     return RedirectToAction("PorPropietario", new { id = id });
                 }
                 else
@@ -149,7 +149,7 @@ namespace Inmobiliaria.Controllers
                
                 int idPro = ViewBag.IdPro;
                
-                    entidad.IdInmueble = id;
+                    entidad.Id = id;
                     repositorio.Modificacion(entidad);
                     TempData["Mensaje"] = "Datos guardados correctamente";
                     return RedirectToAction("PorPropietario", new { id = idPro });
